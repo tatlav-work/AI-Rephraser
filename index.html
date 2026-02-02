@@ -1,9 +1,8 @@
 <!DOCTYPE html>
-<html lang="ru">
-<head>
+<html lang="en"> <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI Rephraser — Интеллектуальный помощник</title>
+    <title>AI Magic Rephrase — Pro Assistant</title>
     <link rel="stylesheet" href="style.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -12,27 +11,33 @@
 <body>
     <div class="app-container">
         <header>
-            <h1>AI Rephraser</h1>
-            <p>Усовершенствуй свой текст с помощью искусственного интеллекта</p>
+            <h1 data-i18n="title">AI Magic Rephrase ✨</h1>
+            <p data-i18n="subtitle">Transform your writing with AI magic</p>
         </header>
         
         <div class="grid">
             <div class="textarea-wrapper">
-                <textarea id="inputText" maxlength="5000" placeholder="Введите ваш текст здесь..."></textarea>
-                <button id="clearBtn" class="clear-input-btn" title="Очистить ввод">&times;</button>
+                <textarea id="inputText" maxlength="5000" placeholder="Type or paste your text here..."></textarea>
+                <button id="clearBtn" class="clear-input-btn" title="Clear input">&times;</button>
                 <span id="charCounter" class="char-counter">0 / 5000</span>
-                <div id="limitAlert" class="limit-alert hidden">Лимит символов достигнут</div>
+                <div id="limitAlert" class="limit-alert hidden" data-i18n="limit_alert">Character limit reached</div>
             </div>
             
             <div class="textarea-wrapper">
-                <div id="outputText" class="result-box">Результат появится здесь...</div>
-                <button id="copyBtn" class="copy-btn" title="Скопировать результат">
+                <div id="outputText" class="result-box">Result will appear here...</div>
+                
+                <button id="copyBtn" class="copy-btn" title="Copy result">
                     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
                 </button>
                 
+                <div class="token-info">
+                    <span data-i18n="tokens_label">Tokens left:</span>
+                    <span id="tokenCount">400</span>
+                </div>
+                
                 <div id="loader" class="loader-overlay hidden">
                     <div class="spinner"></div>
-                    <span>Обработка текста...</span>
+                    <span data-i18n="processing">Processing...</span>
                 </div>
             </div>
         </div> 
@@ -40,7 +45,7 @@
         <div class="controls">
             <div class="controls-row">
                 <div class="control-group">
-                    <label>Модель ИИ</label>
+                    <label data-i18n="label_model">AI Model</label>
                     <select id="modelSelect" class="control-select">
                         <option value="llama3-8b">Llama 3 (Fast)</option>
                         <option value="gpt-4o">GPT-4o (Smart)</option>
@@ -48,41 +53,40 @@
                 </div>
                 
                 <div class="control-group">
-                    <label>Язык</label>
-                    <select id="languageSelect" class="control-select">
+                    <label data-i18n="label_lang">Interface Language</label>
+                    <select id="languageSelect" class="lang-select">
+                        <option value="en">English 🌐</option>
                         <option value="ru">Русский 🇷🇺</option>
-                        <option value="en">English 🇺🇸</option>
                     </select>
                 </div>
 
                 <div class="control-group">
-                    <label>Стиль</label>
+                    <label data-i18n="label_style">Style</label>
                     <select id="modeSelect" class="control-select">
-                        <option value="professional">💼 Профессиональный</option>
-                        <option value="official">👔 Официальный</option>
-                        <option value="smm">📱 SMM / Соцсети</option>
-                        <option value="casual">😊 Повседневный</option>
-                        <option value="for_kids">👶 Для детей</option>
-                        <option value="short">⚡️ Сократить</option>
+                        <option value="professional" data-i18n="opt_pro">💼 Professional</option>
+                        <option value="official" data-i18n="opt_off">👔 Official</option>
+                        <option value="smm" data-i18n="opt_smm">📱 Social Media</option>
+                        <option value="casual" data-i18n="opt_cas">😊 Casual</option>
+                        <option value="for_kids" data-i18n="opt_kids">👶 For Kids</option>
+                        <option value="short" data-i18n="opt_short">⚡️ Shorten</option>
                     </select>
                 </div>
 
                 <div class="control-group">
-                    <label>Интенсивность стиля</label>
+                    <label data-i18n="creativity_title">Creativity Level</label>
                     <div class="intensity-segments" id="intensityPicker">
                         <button type="button" class="segment active" data-value="1">1</button>
                         <button type="button" class="segment" data-value="2">2</button>
                         <button type="button" class="segment" data-value="3">3</button>
-                        <div class="slider-tooltip" id="sliderTooltip">Минимальные правки</div>
+                        <div class="slider-tooltip" id="sliderTooltip" data-i18n="tooltip_1">Minor edits</div>
                     </div>
                     <input type="hidden" id="intensity" value="1">
                 </div>
             </div>
             
-            <button id="rephraseBtn">Перефразировать ✨</button>
+            <button id="rephraseBtn" data-i18n="btn_rephrase">Rephrase It! 🚀</button>
         </div>
     </div>
     <script src="script.js"></script>
 </body>
-
 </html>
