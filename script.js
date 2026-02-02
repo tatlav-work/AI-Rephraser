@@ -33,7 +33,7 @@
         rephraseBtn.disabled = true;
 
         try {
-            const response = await fetch('http://localhost:5000/rephrase', {
+            const response = await fetch('https://ai-rephraser-api.onrender.com/rephrase', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(payload)
@@ -114,3 +114,4 @@
         intensityHiddenInput.value = btn.dataset.value;
     });
 })();
+
