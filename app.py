@@ -26,7 +26,7 @@ def rephrase():
         )
 
         response = client.chat.completions.create(
-            odel="llama-3.3-70b-versatile",
+            model="llama-3.3-70b-versatile",
             messages=[
                 {"role": "system", "content": prompt},
                 {"role": "user", "content": user_text}
@@ -42,5 +42,6 @@ def rephrase():
 if __name__ == "__main__":
 
     app.run(host='0.0.0.0', port=5000)
+
 
 
