@@ -22,7 +22,9 @@ def rephrase():
         prompt = (
             f"Role: Professional Editor. Task: Rephrase text.\n"
             f"Style: {style}. Language: {language}. Intensity: {intensity}/3.\n"
-            f"Rules: Return ONLY the corrected text without any explanations or quotes."
+            f"Instructions: If style is 'smm', use relevant emojis. "
+            f"If intensity is 3, rewrite the text significantly and creatively. "
+            f"Return ONLY the result."
         )
 
         response = client.chat.completions.create(
@@ -42,6 +44,7 @@ def rephrase():
 if __name__ == "__main__":
 
     app.run(host='0.0.0.0', port=5000)
+
 
 
 
