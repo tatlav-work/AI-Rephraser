@@ -32,21 +32,27 @@
         loader.classList.remove('hidden');
         rephraseBtn.disabled = true;
 
-        try {
+       try {
             const response = await fetch('https://ai-rephraser-api.onrender.com/rephrase', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(payload)
             });
 
+            if (!response.ok) {
+                const errorData = await response.json();
+                throw new Error(errorData.error || `Ошибка сервера: ${response.status}`);
+            }
+
             const data = await response.json();
             if (data.result) {
                 outputText.textContent = data.result;
             } else {
-                throw new Error(data.error || "Ошибка обработки");
+                throw new Error("Сервер прислал пустой ответ");
             }
         } catch (error) {
-            outputText.textContent = "Сервер недоступен. Запустите app.py или проверьте подключение.";
+            console.error("Детальная ошибка:", error);
+            outputText.textContent = "Ошибка: " + error.message;
         } finally {
             loader.classList.add('hidden');
             rephraseBtn.disabled = false;
@@ -114,5 +120,6 @@
         intensityHiddenInput.value = btn.dataset.value;
     });
 })();
+
 
 
