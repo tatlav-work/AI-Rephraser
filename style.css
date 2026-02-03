@@ -47,7 +47,7 @@ textarea, .result-box {
     resize: none;
     color: #e0e0e0;
     white-space: pre-wrap;
-    overflow-wrap: anywhere; /* Принудительный перенос */
+    overflow-wrap: anywhere;
     overflow-y: auto;
     overflow-x: hidden;
 }
@@ -62,14 +62,17 @@ textarea {
     background: #131416; 
     border: 1px solid var(--border-color); 
     position: relative;
+    /* Исправление: отступ справа, чтобы текст не затекал под кнопку копирования */
+    padding-right: 55px !important;
 }
 
 .textarea-wrapper { position: relative; width: 100%; }
 
+/* Исправление: симметричные отступы счетчика */
 .char-counter {
     position: absolute;
-    bottom: 15px;
-    right: 15px;
+    bottom: 12px;
+    right: 12px;
     font-size: 12px;
     color: var(--text-gray);
     z-index: 2;
@@ -77,26 +80,19 @@ textarea {
 
 .char-counter.warning { color: #ff4d4d; font-weight: bold; }
 
-.limit-alert {
-    position: absolute;
-    top: -40px;
-    left: 0;
-    right: 0;
-    background: #ff4d4d;
-    color: white;
-    padding: 8px;
-    border-radius: 8px;
-    font-size: 13px;
-    text-align: center;
-}
-
+/* Исправление: сетка контролов теперь ровная и включает язык */
 .controls-row {
     display: grid;
-    grid-template-columns: 1fr 0.8fr 1.2fr 1fr;
-    gap: 15px;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
     width: 100%;
     margin-bottom: 30px;
     align-items: flex-end;
+}
+
+.control-group {
+    display: flex;
+    flex-direction: column;
 }
 
 .control-group label { display: block; font-size: 13px; color: var(--text-gray); margin-bottom: 10px; }
@@ -107,13 +103,14 @@ textarea {
     background: #252525;
     border: 1px solid var(--border-color);
     border-radius: 10px;
-    padding: 0 40px 0 15px;
+    padding: 0 30px 0 12px;
     color: #fff;
     outline: none;
     appearance: none;
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='white' viewBox='0 0 16 16'%3E%3Cpath d='M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z'/%3E%3C/svg%3E");
     background-repeat: no-repeat;
-    background-position: right 15px center;
+    background-position: right 12px center;
+    cursor: pointer;
 }
 
 .intensity-segments {
@@ -133,6 +130,7 @@ textarea {
     cursor: pointer;
     font-weight: 600;
     border-radius: 8px;
+    transition: all 0.2s;
 }
 
 .segment.active { background: var(--primary); color: white; }
@@ -154,17 +152,70 @@ textarea {
 
 .intensity-segments:hover .slider-tooltip { visibility: visible; opacity: 1; }
 
+button#rephraseBtn {
+    display: block; width: 100%; max-width: 360px; margin: 0 auto;
+    background: var(--primary); color: #fff; padding: 18px 0;
+    border-radius: 16px; border: none; font-size: 16px; font-weight: 600; cursor: pointer;
+    transition: all 0.2s;
+}
+
+button#rephraseBtn:hover { filter: brightness(1.2); transform: translateY(-1px); }
+button#rephraseBtn:active { transform: translateY(1px); }
+
+.copy-btn {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background: #64748b;
+    border: none;
+    color: white;
+    padding: 8px;
+    border-radius: 8px;
+    cursor: pointer;
+    z-index: 5;
+    transition: all 0.2s;
+}
+
+.copy-btn.success { background: #28a745 !important; }
+
+.token-info {
+    margin-top: 10px;
+    font-size: 13px;
+    color: var(--text-gray);
+    text-align: right;
+}
+
+#tokenCount { color: var(--primary); font-weight: 600; }
+
+.clear-input-btn {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--border-color);
+    color: var(--text-gray);
+    width: 26px;
+    height: 26px;
+    border-radius: 6px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    z-index: 5;
+}
+
+.clear-input-btn:hover { background: #ff4d4d; color: white; border-color: #ff4d4d; }
+
 .loader-overlay {
     position: absolute;
     top: 0; left: 0; right: 0; bottom: 0;
     background: rgba(19, 20, 22, 0.9);
     display: flex;
-    flex-direction: column;
     justify-content: center;
     align-items: center;
     border-radius: 12px;
     z-index: 10;
-    gap: 15px;
     backdrop-filter: blur(4px);
 }
 
@@ -178,97 +229,9 @@ textarea {
 }
 
 @keyframes spin { to { transform: rotate(360deg); } }
-
-button#rephraseBtn {
-    display: block; width: 100%; max-width: 360px; margin: 0 auto;
-    background: var(--primary); color: #fff; padding: 18px 0;
-    border-radius: 16px; border: none; font-size: 16px; font-weight: 600; cursor: pointer;
-}
-
-.copy-btn {
-    position: absolute;
-    top: 15px;
-    right: 15px;
-    background: rgba(255, 255, 255, 0.05);
-    border: 1px solid var(--border-color);
-    color: var(--text-gray);
-    padding: 8px;
-    border-radius: 8px;
-    cursor: pointer;
-    z-index: 5;
-}
-
-.copy-btn.success { background: #28a745; color: white; }
 .hidden { display: none !important; }
 
-.clear-input-btn {
-    position: absolute;
-    top: 15px;
-    right: 15px;
-    background: rgba(255, 255, 255, 0.05);
-    border: 1px solid var(--border-color);
-    color: var(--text-gray);
-    width: 28px;
-    height: 28px;
-    border-radius: 6px;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 18px;
-    transition: all 0.2s;
-    z-index: 5;
-}
-
-.clear-input-btn:hover {
-    background: #ff4d4d;
-    color: white;
-    border-color: #ff4d4d;
-}
-
-/* Смещаем счетчик чуть левее, чтобы не перекрывался кнопкой, если нужно */
-.char-counter {
-    bottom: 15px;
-    right: 15px;
-
-}
-
-/* 1. Курсор-указатель для всех интерактивных элементов */
-button, select, .intensity-btn, .copy-btn, .clear-btn {
-    cursor: pointer !important;
-}
-
-/* 2. Состояния кнопок: наведение и клик */
-.btn {
-    transition: all 0.2s ease;
-}
-
-.btn:hover {
-    filter: brightness(1.2);
-    transform: translateY(-1px);
-}
-
-.btn:active {
-    transform: translateY(1px);
-}
-
-/* 3. Нейтральный цвет для кнопки копирования */
-.copy-btn {
-    background-color: #64748b !important; /* Серый вместо зеленого */
-}
-
-/* 4. Адаптивность для мобильных устройств */
 @media (max-width: 768px) {
-    .main-container {
-        flex-direction: column; /* Инпуты встают друг под друга */
-        gap: 20px;
-    }
-    .input-box, .output-box {
-        width: 100% !important;
-    }
-}
-
-/* 5. Исправление наезда текста на кнопки (внутренний отступ) */
-textarea, .output-display {
-    padding-bottom: 50px !important;
+    .grid { grid-template-columns: 1fr; }
+    .controls-row { grid-template-columns: 1fr 1fr; }
 }
