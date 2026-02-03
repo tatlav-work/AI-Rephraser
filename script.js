@@ -13,7 +13,7 @@
     const tooltip = document.getElementById('sliderTooltip');
     const tokenDisplay = document.getElementById('tokenCount');
 
-    // Словарь локализации для мультиязычного интерфейса
+    // Локализация с системой Энергии
     const translations = {
         en: {
             title: "AI Magic Rephrase ✨",
@@ -21,7 +21,9 @@
             label_input: "Your Text",
             label_output: "Magic Result ✨",
             btn_rephrase: "Rephrase It! 🚀",
-            tokens_label: "Tokens left:",
+            energy_label: "Energy left:",
+            energy_suffix: "energy",
+            retries_suffix: "left",
             processing: "Processing...",
             limit_alert: "Character limit reached",
             label_model: "AI Model",
@@ -44,7 +46,9 @@
             label_input: "Ваш текст",
             label_output: "Магический результат ✨",
             btn_rephrase: "Перефразировать! 🚀",
-            tokens_label: "Токенов осталось:",
+            energy_label: "Энергии осталось:",
+            energy_suffix: "энергии",
+            retries_suffix: "осталось",
             processing: "Обработка...",
             limit_alert: "Лимит символов достигнут",
             label_model: "Модель ИИ",
@@ -69,28 +73,33 @@
         "3": { en: "Creative rewrite", ru: "Творческий перефраз" }
     };
 
-    // Логика управления лимитами (токены)
-    let tokens = 400;
+    // Логика Energy (400 ед. = 4 попытки по 100)
+    let energy = 400;
 
-    function updateTokens() {
-        if (tokens <= 0) {
-            alert("Out of tokens! 😱\nPlease upgrade to PRO version to continue using our Magic Rephraser.");
-            window.location.href = "#"; 
+    function renderEnergy() {
+        const lang = document.getElementById('languageSelect').value;
+        const t = translations[lang];
+        const attempts = Math.floor(energy / 100);
+        tokenDisplay.innerHTML = `${energy} ${t.energy_suffix} <span style="opacity:0.6">(${attempts} ${t.retries_suffix})</span>`;
+    }
+
+    function updateEnergy() {
+        if (energy <= 0) {
+            const lang = document.getElementById('languageSelect').value;
+            alert(lang === 'ru' ? "Энергия закончилась! 😱" : "Out of energy! 😱");
             return false;
         }
-        tokens -= 100;
-        tokenDisplay.textContent = tokens;
+        energy -= 100;
+        renderEnergy();
         return true;
     }
 
-    // Основная функция запроса к API
     async function startRephrasing() {
         const text = inputText.value.trim();
         const currentLang = document.getElementById('languageSelect').value;
 
         if (!text || rephraseBtn.disabled) return;
-        
-        if (!updateTokens()) return;
+        if (!updateEnergy()) return;
 
         const payload = {
             text: text,
@@ -109,19 +118,13 @@
                 body: JSON.stringify(payload)
             });
 
-            if (!response.ok) {
-                const errorData = await response.json();
-                throw new Error(errorData.error || `Server error: ${response.status}`);
-            }
+            if (!response.ok) throw new Error(`Server error: ${response.status}`);
 
             const data = await response.json();
             if (data.result) {
                 outputText.textContent = data.result;
-            } else {
-                throw new Error("Empty response from server");
             }
         } catch (error) {
-            console.error("Error details:", error);
             outputText.textContent = (currentLang === 'ru' ? "Ошибка: " : "Error: ") + error.message;
         } finally {
             loader.classList.add('hidden');
@@ -129,28 +132,24 @@
         }
     }
 
-    // Обработчик смены языка интерфейса
+    // Смена языка
     document.getElementById('languageSelect').addEventListener('change', (e) => {
         const lang = e.target.value;
         document.querySelectorAll('[data-i18n]').forEach(el => {
             const key = el.getAttribute('data-i18n');
-            if (translations[lang][key]) {
-                el.textContent = translations[lang][key];
-            }
+            if (translations[lang][key]) el.textContent = translations[lang][key];
         });
         
         inputText.placeholder = lang === 'ru' ? 'Введите текст...' : 'Type or paste your text here...';
-        if (outputText.textContent.includes("Результат") || outputText.textContent.includes("Result")) {
+        if (outputText.textContent.includes("Result") || outputText.textContent.includes("Результат")) {
             outputText.textContent = translations[lang].res_placeholder;
         }
+        renderEnergy(); // Обновляем текст энергии при смене языка
     });
 
-    // Мониторинг ввода текста
     inputText.addEventListener('input', () => {
-        let count = inputText.value.length;
-        charCounter.textContent = `${count} / 5000`;
-        
-        if (count >= 5000) {
+        charCounter.textContent = `${inputText.value.length} / 5000`;
+        if (inputText.value.length >= 5000) {
             charCounter.classList.add('warning');
             limitAlert.classList.remove('hidden');
         } else {
@@ -168,26 +167,21 @@
 
     rephraseBtn.addEventListener('click', startRephrasing);
 
-    // Очистка поля ввода
     clearBtn.addEventListener('click', () => {
         inputText.value = "";
         charCounter.textContent = "0 / 5000";
         inputText.focus();
     });
 
-    // Копирование в буфер обмена с обратной связью
     copyBtn.addEventListener('click', () => {
         const text = outputText.textContent;
         const lang = document.getElementById('languageSelect').value;
-        const placeholder = translations[lang].res_placeholder;
-
-        if (!text || text === placeholder) return;
+        if (!text || text === translations[lang].res_placeholder) return;
         
         navigator.clipboard.writeText(text).then(() => {
             const originalTitle = copyBtn.title;
             copyBtn.title = translations[lang].copied;
             copyBtn.classList.add('success');
-            
             setTimeout(() => {
                 copyBtn.title = originalTitle;
                 copyBtn.classList.remove('success');
@@ -195,7 +189,6 @@
         });
     });
 
-    // Управление уровнем креативности
     intensityPicker.addEventListener('mousemove', (e) => {
         const lang = document.getElementById('languageSelect').value;
         tooltip.style.left = e.clientX + 'px';
@@ -211,4 +204,7 @@
         btn.classList.add('active');
         intensityHiddenInput.value = btn.dataset.value;
     });
+
+    // Инициализация энергии при загрузке
+    renderEnergy();
 })();
