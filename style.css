@@ -230,4 +230,45 @@ button#rephraseBtn {
 .char-counter {
     bottom: 15px;
     right: 15px;
+
+}
+
+/* 1. Курсор-указатель для всех интерактивных элементов */
+button, select, .intensity-btn, .copy-btn, .clear-btn {
+    cursor: pointer !important;
+}
+
+/* 2. Состояния кнопок: наведение и клик */
+.btn {
+    transition: all 0.2s ease;
+}
+
+.btn:hover {
+    filter: brightness(1.2);
+    transform: translateY(-1px);
+}
+
+.btn:active {
+    transform: translateY(1px);
+}
+
+/* 3. Нейтральный цвет для кнопки копирования */
+.copy-btn {
+    background-color: #64748b !important; /* Серый вместо зеленого */
+}
+
+/* 4. Адаптивность для мобильных устройств */
+@media (max-width: 768px) {
+    .main-container {
+        flex-direction: column; /* Инпуты встают друг под друга */
+        gap: 20px;
+    }
+    .input-box, .output-box {
+        width: 100% !important;
+    }
+}
+
+/* 5. Исправление наезда текста на кнопки (внутренний отступ) */
+textarea, .output-display {
+    padding-bottom: 50px !important;
 }
