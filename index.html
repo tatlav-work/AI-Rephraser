@@ -44,45 +44,39 @@
 
         <div class="controls">
             <div class="controls-row">
-                <div class="control-group">
-                    <label data-i18n="label_model">AI Model</label>
-                    <select id="modelSelect" class="control-select">
-                        <option value="llama3-8b">Llama 3 (Fast)</option>
-                        <option value="gpt-4o">GPT-4o (Smart)</option>
-                    </select>
-                </div>
-                
-                <div class="control-group">
-                    <label data-i18n="label_lang">Interface Language</label>
-                    <select id="languageSelect" class="lang-select">
-                        <option value="en">English 🌐</option>
-                        <option value="ru">Русский 🇷🇺</option>
-                    </select>
-                </div>
+    <div class="control-group">
+        <label data-i18n="label_model">AI Model</label>
+        <select class="control-select" id="modelSelect">
+            <option value="llama-3">Llama 3 (Fast)</option>
+        </select>
+    </div>
 
-                <div class="control-group">
-                    <label data-i18n="label_style">Style</label>
-                    <select id="modeSelect" class="control-select">
-                        <option value="professional" data-i18n="opt_pro">💼 Professional</option>
-                        <option value="official" data-i18n="opt_off">👔 Official</option>
-                        <option value="smm" data-i18n="opt_smm">📱 Social Media</option>
-                        <option value="casual" data-i18n="opt_cas">😊 Casual</option>
-                        <option value="for_kids" data-i18n="opt_kids">👶 For Kids</option>
-                        <option value="short" data-i18n="opt_short">⚡️ Shorten</option>
-                    </select>
-                </div>
+    <div class="control-group">
+        <label data-i18n="label_lang">Interface Language</label>
+        <select class="control-select" id="languageSelect">
+            <option value="en">English 🌐</option>
+            <option value="ru">Русский 🇷🇺</option>
+        </select>
+    </div>
 
-                <div class="control-group">
-                    <label data-i18n="creativity_title">Creativity Level</label>
-                    <div class="intensity-segments" id="intensityPicker">
-                        <button type="button" class="segment active" data-value="1">1</button>
-                        <button type="button" class="segment" data-value="2">2</button>
-                        <button type="button" class="segment" data-value="3">3</button>
-                        <div class="slider-tooltip" id="sliderTooltip" data-i18n="tooltip_1">Minor edits</div>
-                    </div>
-                    <input type="hidden" id="intensity" value="1">
-                </div>
-            </div>
+    <div class="control-group">
+        <label data-i18n="label_style">Style</label>
+        <select class="control-select" id="modeSelect">
+            <option value="professional" data-i18n="opt_pro">💼 Professional</option>
+            <option value="casual" data-i18n="opt_cas">😊 Casual</option>
+        </select>
+    </div>
+
+    <div class="control-group">
+        <label data-i18n="creativity_title">Creativity Level</label>
+        <div class="intensity-segments" id="intensityPicker">
+            <button class="segment active" data-value="1">1</button>
+            <button class="segment" data-value="2">2</button>
+            <button class="segment" data-value="3">3</button>
+        </div>
+        <input type="hidden" id="intensity" value="1">
+    </div>
+</div>
             
             <button id="rephraseBtn" data-i18n="btn_rephrase">Rephrase It! 🚀</button>
         </div>
@@ -90,3 +84,4 @@
     <script src="script.js"></script>
 </body>
 </html>
+
