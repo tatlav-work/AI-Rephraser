@@ -1,87 +1,101 @@
 <!DOCTYPE html>
-<html lang="en"> <head>
+<html lang="en">
+<head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AI Magic Rephrase — Pro Assistant</title>
     <link rel="stylesheet" href="style.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
     <div class="app-container">
         <header>
-            <h1 data-i18n="title">AI Magic Rephrase ✨</h1>
-            <p data-i18n="subtitle">Transform your writing with AI magic</p>
+            <div class="header-main">
+                <div class="header-text">
+                    <h1 data-i18n="title">AI Magic Rephrase ✨</h1>
+                    <p data-i18n="subtitle">Transform your writing with AI magic</p>
+                </div>
+                <div class="language-top-select">
+                    <select id="languageSelect" class="lang-minimal">
+                        <option value="en">English 🌐</option>
+                        <option value="ru">Русский 🇷🇺</option>
+                    </select>
+                </div>
+            </div>
         </header>
         
         <div class="grid">
-            <div class="textarea-wrapper">
-                <textarea id="inputText" maxlength="5000" placeholder="Type or paste your text here..."></textarea>
-                <button id="clearBtn" class="clear-input-btn" title="Clear input">&times;</button>
-                <span id="charCounter" class="char-counter">0 / 5000</span>
-                <div id="limitAlert" class="limit-alert hidden" data-i18n="limit_alert">Character limit reached</div>
-            </div>
-            
-            <div class="textarea-wrapper">
-                <div id="outputText" class="result-box">Result will appear here...</div>
-                
-                <button id="copyBtn" class="copy-btn" title="Copy result">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
-                </button>
-                
-                <div class="token-info">
-                    <span data-i18n="tokens_label">Tokens left:</span>
-                    <span id="tokenCount">400</span>
-                </div>
-                
-                <div id="loader" class="loader-overlay hidden">
-                    <div class="spinner"></div>
-                    <span data-i18n="processing">Processing...</span>
+            <div class="textarea-container">
+                <div class="textarea-wrapper">
+                    <textarea id="inputText" maxlength="5000" placeholder="Type or paste your text here..."></textarea>
+                    <button id="clearBtn" class="clear-input-btn" title="Clear input">&times;</button>
+                    <span id="charCounter" class="char-counter">0 / 5000</span>
                 </div>
             </div>
-        </div> 
 
-        <div class="controls">
-            <div class="controls-row">
-    <div class="control-group">
-        <label data-i18n="label_model">AI Model</label>
-        <select class="control-select" id="modelSelect">
-            <option value="llama-3">Llama 3 (Fast)</option>
-        </select>
-    </div>
-
-    <div class="control-group">
-        <label data-i18n="label_lang">Interface Language</label>
-        <select class="control-select" id="languageSelect">
-            <option value="en">English 🌐</option>
-            <option value="ru">Русский 🇷🇺</option>
-        </select>
-    </div>
-
-    <div class="control-group">
-        <label data-i18n="label_style">Style</label>
-        <select class="control-select" id="modeSelect">
-            <option value="professional" data-i18n="opt_pro">💼 Professional</option>
-            <option value="casual" data-i18n="opt_cas">😊 Casual</option>
-        </select>
-    </div>
-
-    <div class="control-group">
-        <label data-i18n="creativity_title">Creativity Level</label>
-        <div class="intensity-segments" id="intensityPicker">
-            <button class="segment active" data-value="1">1</button>
-            <button class="segment" data-value="2">2</button>
-            <button class="segment" data-value="3">3</button>
+            <div class="textarea-container">
+                <div class="result-magic-wrapper">
+                    <div class="textarea-wrapper result-area">
+                        <div id="outputText" class="output-placeholder" data-i18n="res_placeholder">Result will appear here...</div>
+                        <button id="copyBtn" class="copy-btn" title="Copy result">
+                            <span class="tooltip-text" id="copyTooltip">Copied!</span>
+                            📋
+                        </button>
+                        <div id="loader" class="loader-overlay hidden">
+                            <div class="spinner"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-        <input type="hidden" id="intensity" value="1">
-    </div>
-</div>
-            
-            <button id="rephraseBtn" data-i18n="btn_rephrase">Rephrase It! 🚀</button>
+
+        <div class="controls-panel">
+            <div class="control-group">
+                <label data-i18n="label_model">AI Model 🤖</label>
+                <select class="control-select" id="modelSelect">
+                    <option value="llama-3">Llama 3.3 (Fast)</option>
+                    <option value="gpt-4" disabled>GPT-4o (Pro)</option>
+                </select>
+            </div>
+
+            <div class="control-group">
+                <label data-i18n="label_style">Style 🎨</label>
+                <select class="control-select" id="modeSelect">
+                    <option value="professional" data-i18n="opt_pro">💼 Professional</option>
+                    <option value="casual" data-i18n="opt_cas">😊 Casual</option>
+                    <option value="smm" data-i18n="opt_smm">📱 SMM / Social</option>
+                    <option value="custom" data-i18n="opt_custom">✨ Custom Style</option>
+                </select>
+            </div>
+
+            <div class="control-group">
+                <label data-i18n="magic_level_title">Magic Level ⚡️</label>
+                <div class="intensity-segments" id="intensityPicker">
+                    <button class="segment active" data-value="1">1</button>
+                    <button class="segment" data-value="2">2</button>
+                    <button class="segment" data-value="3">3</button>
+                    <div class="slider-tooltip" id="sliderTooltip">Chill</div>
+                </div>
+                <input type="hidden" id="intensity" value="1">
+            </div>
+        </div>
+        
+        <div class="action-area">
+            <button id="rephraseBtn">
+                <span data-i18n="btn_rephrase">Rephrase It! 🚀</span>
+            </button>
+            <div class="energy-bar">
+                <span id="tokenCount">400 energy left</span>
+            </div>
+        </div>
+
+        <div class="history-section">
+            <h3 data-i18n="history_title">Recent Magic ✨</h3>
+            <div id="historyList" class="history-list"></div>
         </div>
     </div>
     <script src="script.js"></script>
 </body>
 </html>
-
