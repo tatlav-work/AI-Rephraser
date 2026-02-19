@@ -1,12 +1,25 @@
 import os
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, send_from_directory
 from flask_cors import CORS
 from groq import Groq
 
 app = Flask(__name__)
 CORS(app)
 
-# Используем ключ из переменных окружения
+# --- НОВЫЕ МАРШРУТЫ ДЛЯ ОТОБРАЖЕНИЯ САЙТА ---
+
+@app.route('/')
+def index():
+    # Говорим серверу отдавать index.html при заходе на главную
+    return send_from_directory('.', 'index.html')
+
+@app.route('/<path:path>')
+def static_files(path):
+    # Позволяем серверу находить style.css и script.js
+    return send_from_directory('.', path)
+
+# --- ТВОЯ ЛОГИКА С GROQ (БЕЗ ИЗМЕНЕНИЙ) ---
+
 API_KEY = os.environ.get("GROQ_API_KEY", "")
 client = Groq(api_key=API_KEY)
 
@@ -16,10 +29,9 @@ def rephrase():
         data = request.json
         user_text = data.get('text', '')
         style = data.get('style', 'professional')
-        language = data.get('language', 'en') # По умолчанию теперь English
+        language = data.get('language', 'en')
         intensity = data.get('intensity', '1')
 
-        # Улучшенный промпт для более точного следования выбранным настройкам
         prompt = (
             f"Role: Expert AI Writing Assistant.\n"
             f"Task: Rephrase the provided text using the following parameters:\n"
@@ -39,15 +51,14 @@ def rephrase():
                 {"role": "system", "content": prompt},
                 {"role": "user", "content": user_text}
             ],
-            temperature=0.7, # Немного подняли температуру для большей "магии" на уровне 3
+            temperature=0.7,
         )
 
         return jsonify({"result": response.choices[0].message.content.strip()})
     
     except Exception as e:
-        print(f"Error occurred: {str(e)}") # Логируем ошибку для отладки
+        print(f"Error occurred: {str(e)}")
         return jsonify({"error": str(e)}), 500
 
 if __name__ == "__main__":
-    # Порт 5000 стандартный для Render
     app.run(host='0.0.0.0', port=5000)
