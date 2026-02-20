@@ -123,6 +123,7 @@ textarea {
     padding: 2px;
     border: 1px solid var(--border-color);
     height: 44px;
+    width: 180px; /* Добавь фиксированную ширину для всей группы */
 }
 
 .segment {
@@ -133,9 +134,13 @@ textarea {
     cursor: pointer;
     font-weight: 600;
     border-radius: 8px;
+    transition: all 0.3s ease; /* Добавим плавности */
 }
 
-.segment.active { background: var(--primary); color: white; }
+.segment.active {
+    background: var(--primary); /* Тот самый синий цвет */
+    color: white;
+}
 
 .slider-tooltip {
     position: fixed;
@@ -316,4 +321,5 @@ textarea, .output-display {
     color: white;
     min-height: 200px; /* Чтобы поле не схлопывалось */
 }
+
 
