@@ -196,35 +196,34 @@
     });
 
     // Управление Magic Level и тултипом
-const tooltip = document.getElementById('magic-tooltip');
-const segments = document.querySelectorAll('.segment');
-const langSelect = document.getElementById('languageSelect');
+const magicTooltip = document.getElementById('magic-tooltip');
+const magicSegments = document.querySelectorAll('.segment');
 
-segments.forEach(segment => {
-    // Показываем тултип при наведении
+magicSegments.forEach(segment => {
     segment.addEventListener('mouseenter', () => {
         const level = segment.getAttribute('data-level');
-        const lang = langSelect.value || 'en';
-        tooltip.textContent = tips[level][lang];
-        tooltip.classList.add('visible');
+        const currentLang = document.getElementById('languageSelect').value || 'en';
+        
+        // Берем текст из нашего объекта tips
+        magicTooltip.textContent = tips[level][currentLang];
+        magicTooltip.classList.add('visible');
+
+        // ВАЖНО: Прячем стандартный тултип, чтобы не было как на скрине
+        segment.setAttribute('data-old-title', segment.title);
+        segment.title = ''; 
     });
 
-    // Тултип бегает за курсором
     segment.addEventListener('mousemove', (e) => {
-        tooltip.style.left = (e.clientX + 15) + 'px';
-        tooltip.style.top = (e.clientY + 15) + 'px';
+        // Тултип плавно летает за мышкой
+        magicTooltip.style.left = (e.clientX + 15) + 'px';
+        magicTooltip.style.top = (e.clientY + 15) + 'px';
     });
 
-    // Прячем тултип
     segment.addEventListener('mouseleave', () => {
-        tooltip.classList.remove('visible');
-    });
-
-    // Переключение активной кнопки
-    segment.addEventListener('click', () => {
-        segments.forEach(s => s.classList.remove('active'));
-        segment.classList.add('active');
-        // Тут можно добавить сохранение значения для API, если нужно
+        magicTooltip.classList.remove('visible');
+        // Возвращаем title обратно для порядка
+        segment.title = segment.getAttribute('data-old-title');
     });
 });
+
 
