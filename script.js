@@ -7,10 +7,6 @@
     const loader = document.getElementById('loader');
     const copyBtn = document.getElementById('copyBtn');
     const clearBtn = document.getElementById('clearBtn');
-    
-    const intensityPicker = document.getElementById('intensityPicker');
-    const intensityHiddenInput = document.getElementById('intensity');
-    const tooltip = document.getElementById('sliderTooltip');
     const tokenDisplay = document.getElementById('tokenCount');
 
     // Словарь локализации для мультиязычного интерфейса
@@ -225,6 +221,7 @@ mSegments.forEach(segment => {
         segment.classList.add('active');
     });
 });
+
 
 
 
