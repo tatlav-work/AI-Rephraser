@@ -64,9 +64,9 @@
     };
 
     const tips = {
-        "1": { en: "Minor edits", ru: "Минимальный перефраз" },
-        "2": { en: "Balanced magic", ru: "Сбалансированный перефраз" },
-        "3": { en: "Creative rewrite", ru: "Творческий перефраз" }
+        "1": { en: "Chill ✨", ru: "Спокойный ✨" },
+    "2": { en: "Creative 🎨", ru: "Творческий 🎨" },
+    "3": { en: "Wild 🔥", ru: "Дикий 🔥" }
     };
 
     // Логика управления лимитами (токены)
@@ -195,20 +195,36 @@
         });
     });
 
-    // Управление уровнем креативности
-    intensityPicker.addEventListener('mousemove', (e) => {
-        const lang = document.getElementById('languageSelect').value;
-        tooltip.style.left = e.clientX + 'px';
-        tooltip.style.top = e.clientY + 'px';
-        const btn = e.target.closest('.segment');
-        if (btn) tooltip.textContent = tips[btn.dataset.value][lang];
+    // Управление Magic Level и тултипом
+const tooltip = document.getElementById('magic-tooltip');
+const segments = document.querySelectorAll('.segment');
+const langSelect = document.getElementById('languageSelect');
+
+segments.forEach(segment => {
+    // Показываем тултип при наведении
+    segment.addEventListener('mouseenter', () => {
+        const level = segment.getAttribute('data-level');
+        const lang = langSelect.value || 'en';
+        tooltip.textContent = tips[level][lang];
+        tooltip.classList.add('visible');
     });
 
-    intensityPicker.addEventListener('click', (e) => {
-        const btn = e.target.closest('.segment');
-        if (!btn) return;
-        document.querySelectorAll('.segment').forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
-        intensityHiddenInput.value = btn.dataset.value;
+    // Тултип бегает за курсором
+    segment.addEventListener('mousemove', (e) => {
+        tooltip.style.left = (e.clientX + 15) + 'px';
+        tooltip.style.top = (e.clientY + 15) + 'px';
     });
-})();
+
+    // Прячем тултип
+    segment.addEventListener('mouseleave', () => {
+        tooltip.classList.remove('visible');
+    });
+
+    // Переключение активной кнопки
+    segment.addEventListener('click', () => {
+        segments.forEach(s => s.classList.remove('active'));
+        segment.classList.add('active');
+        // Тут можно добавить сохранение значения для API, если нужно
+    });
+});
+
