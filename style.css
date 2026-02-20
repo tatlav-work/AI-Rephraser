@@ -188,7 +188,7 @@ textarea {
 @keyframes spin { to { transform: rotate(360deg); } }
 
 button#rephraseBtn {
-    display: block; width: 100%; max-width: 360px; margin: 0 auto;
+    display: block; margin: 30px auto;
     background: var(--primary); color: #fff; padding: 18px 0;
     border-radius: 16px; border: none; font-size: 16px; font-weight: 600; cursor: pointer;
 }
@@ -324,6 +324,7 @@ textarea, .output-display {
     color: white;
     min-height: 200px; /* Чтобы поле не схлопывалось */
 }
+
 
 
 
