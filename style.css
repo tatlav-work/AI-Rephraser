@@ -272,3 +272,38 @@ button, select, .intensity-btn, .copy-btn, .clear-btn {
 textarea, .output-display {
     padding-bottom: 50px !important;
 }
+
+/* Обертка для магического свечения */
+.result-magic-wrapper {
+    position: relative;
+    padding: 2px;
+    background: linear-gradient(45deg, #6e8efb, #a777e3, #6e8efb);
+    background-size: 400% 400%;
+    border-radius: 12px;
+    animation: gradient-animation 3s ease infinite, magic-glow 2s ease-in-out infinite alternate;
+}
+
+@keyframes gradient-animation {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+@keyframes magic-glow {
+    from {
+        box-shadow: 0 0 5px #6e8efb, 0 0 10px #6e8efb;
+    }
+    to {
+        box-shadow: 0 0 15px #a777e3, 0 0 30px #a777e3;
+    }
+}
+
+/* Убираем стандартную рамку у самого текстового поля, так как теперь есть внешняя */
+#outputText {
+    background: #1a1a1a;
+    border: none !important;
+    margin: 0;
+    width: 100%;
+    display: block;
+    color: #ffffff;
+}
