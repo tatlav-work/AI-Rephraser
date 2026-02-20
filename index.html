@@ -73,16 +73,17 @@
                 </div>
 
                 <div class="control-group">
-                    <label data-i18n="creativity_title">Creativity Level</label>
-                    <div class="intensity-segments" id="intensityPicker">
-                        <button type="button" class="segment active" data-value="1">1</button>
-                        <button type="button" class="segment" data-value="2">2</button>
-                        <button type="button" class="segment" data-value="3">3</button>
-                        <div class="slider-tooltip" id="sliderTooltip" data-i18n="tooltip_1">Minor edits</div>
-                    </div>
-                    <input type="hidden" id="intensity" value="1">
-                </div>
-            </div>
+    <label>Magic Level ✨</label>
+    <div class="intensity-buttons">
+        <button type="button" class="intensity-btn active" data-level="1" title="Chill">1</button>
+        <button type="button" class="intensity-btn" data-level="2" title="Creative">2</button>
+        <button type="button" class="intensity-btn" data-level="3" title="Wild">3</button>
+    </div>
+</div>
+
+<div class="result-magic-wrapper">
+    <textarea id="outputText" readonly placeholder="Result will appear here..."></textarea>
+</div>
             
             <button id="rephraseBtn" data-i18n="btn_rephrase">Rephrase It! 🚀</button>
         </div>
@@ -90,3 +91,4 @@
     <script src="script.js"></script>
 </body>
 </html>
+
