@@ -142,19 +142,23 @@ textarea {
     color: white;
 }
 
-.slider-tooltip {
+.magic-tooltip {
     position: fixed;
     pointer-events: none;
-    background: rgba(35, 35, 35, 0.98);
+    background: rgba(35, 35, 35, 0.98); /* Как на твоем скрине */
     color: #fff;
     padding: 8px 14px;
     border-radius: 8px;
-    font-size: 12px;
+    font-size: 13px;
     z-index: 10000;
     box-shadow: 0 10px 25px rgba(0,0,0,0.5);
-    visibility: hidden;
-    opacity: 0;
-    transform: translate(-50%, -140%);
+    opacity: 0; /* Изначально невидим */
+    transition: opacity 0.2s ease; /* Плавное появление */
+    border: 1px solid #444;
+}
+
+.magic-tooltip.visible {
+    opacity: 1; /* Показываем через JS */
 }
 
 .intensity-segments:hover .slider-tooltip { visibility: visible; opacity: 1; }
@@ -321,5 +325,6 @@ textarea, .output-display {
     color: white;
     min-height: 200px; /* Чтобы поле не схлопывалось */
 }
+
 
 
