@@ -92,7 +92,7 @@
             text: text,
             style: document.getElementById('modeSelect').value,
             language: currentLang,
-            intensity: intensityHiddenInput.value
+            intensity: document.querySelector('.segment.active').getAttribute('data-level')
         };
 
         loader.classList.remove('hidden');
@@ -221,6 +221,7 @@ mSegments.forEach(segment => {
         segment.classList.add('active');
     });
 });
+
 
 
 
