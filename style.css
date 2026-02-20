@@ -145,21 +145,18 @@ textarea {
 .magic-tooltip {
     position: fixed;
     padding: 8px 14px;
-    background: rgba(30, 30, 30, 0.95);
+    background: #1a1a1a; /* Темный фон */
     color: #fff;
     border-radius: 8px;
     font-size: 13px;
     pointer-events: none;
-    opacity: 0;
-    display: none; /* Скрыт по умолчанию */
-    transition: opacity 0.2s ease;
-    z-index: 10000;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+    opacity: 0; /* Изначально скрыт */
+    z-index: 99999;
     border: 1px solid #444;
+    transition: opacity 0.2s ease;
 }
 
 .magic-tooltip.visible {
-    display: block; /* Показываем */
     opacity: 1;
 }
 
@@ -327,6 +324,7 @@ textarea, .output-display {
     color: white;
     min-height: 200px; /* Чтобы поле не схлопывалось */
 }
+
 
 
 
