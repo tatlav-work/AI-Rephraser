@@ -298,12 +298,22 @@ textarea, .output-display {
     }
 }
 
-/* Убираем стандартную рамку у самого текстового поля, так как теперь есть внешняя */
+.result-magic-wrapper {
+    position: relative;
+    padding: 2px;
+    background: linear-gradient(45deg, #6e8efb, #a777e3, #6e8efb);
+    background-size: 400% 400%;
+    border-radius: 12px;
+    animation: gradient-animation 3s ease infinite, magic-glow 2s ease-in-out infinite alternate;
+}
+
 #outputText {
-    background: #1a1a1a;
+    background: #1a1a1a !important;
     border: none !important;
-    margin: 0;
     width: 100%;
     display: block;
-    color: #ffffff;
+    border-radius: 10px;
+    color: white;
+    min-height: 200px; /* Чтобы поле не схлопывалось */
 }
+
