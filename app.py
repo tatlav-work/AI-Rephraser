@@ -60,5 +60,11 @@ def rephrase():
         print(f"Error occurred: {str(e)}")
         return jsonify({"error": str(e)}), 500
 
+import os
+
 if __name__ == "__main__":
-    app.run(host='0.0.0.0', port=5000)
+    # Render передает порт в переменных окружения
+    port = int(os.environ.get("PORT", 5000))
+    # Слушаем на 0.0.0.0, чтобы Render мог достучаться
+    app.run(host="0.0.0.0", port=port)
+
