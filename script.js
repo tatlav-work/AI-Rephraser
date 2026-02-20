@@ -196,34 +196,35 @@
     });
 
     // Управление Magic Level и тултипом
-const magicTooltip = document.getElementById('magic-tooltip');
-const magicSegments = document.querySelectorAll('.segment');
+const mTooltip = document.getElementById('magic-tooltip');
+const mSegments = document.querySelectorAll('.segment');
+const lSelect = document.getElementById('languageSelect');
 
-magicSegments.forEach(segment => {
+// 3. Логика работы
+mSegments.forEach(segment => {
     segment.addEventListener('mouseenter', () => {
         const level = segment.getAttribute('data-level');
-        const currentLang = document.getElementById('languageSelect').value || 'en';
+        const lang = lSelect ? lSelect.value : 'en';
         
-        // Берем текст из нашего объекта tips
-        magicTooltip.textContent = tips[level][currentLang];
-        magicTooltip.classList.add('visible');
-
-        // ВАЖНО: Прячем стандартный тултип, чтобы не было как на скрине
-        segment.setAttribute('data-old-title', segment.title);
-        segment.title = ''; 
+        mTooltip.textContent = tips[level][lang] || tips[level]['en'];
+        mTooltip.classList.add('visible');
     });
 
     segment.addEventListener('mousemove', (e) => {
-        // Тултип плавно летает за мышкой
-        magicTooltip.style.left = (e.clientX + 15) + 'px';
-        magicTooltip.style.top = (e.clientY + 15) + 'px';
+        // Двигаем тултип за курсором
+        mTooltip.style.left = (e.clientX + 15) + 'px';
+        mTooltip.style.top = (e.clientY + 15) + 'px';
     });
 
     segment.addEventListener('mouseleave', () => {
-        magicTooltip.classList.remove('visible');
-        // Возвращаем title обратно для порядка
-        segment.title = segment.getAttribute('data-old-title');
+        mTooltip.classList.remove('visible');
+    });
+
+    segment.addEventListener('click', () => {
+        mSegments.forEach(s => s.classList.remove('active'));
+        segment.classList.add('active');
     });
 });
+
 
 
