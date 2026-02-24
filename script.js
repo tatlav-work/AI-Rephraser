@@ -242,8 +242,8 @@ segments.forEach(seg => {
         const y = e.clientY;
 
         // Двигаем тултип за мышкой
-        tooltip.style.left = x + 'px';
-        tooltip.style.top = y + 'px';
+        tooltip.style.left = e.clientX + 'px';
+        tooltip.style.top = e.clientY + 'px';
         
         // Делаем его видимым
         tooltip.style.visibility = 'visible';
@@ -256,6 +256,7 @@ segments.forEach(seg => {
         tooltip.style.opacity = '0';
     });
 });
+
 
 
 
