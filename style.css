@@ -32,8 +32,10 @@ header { text-align: left; margin-bottom: 25px; }
 h1 { margin: 0; font-size: 32px; font-weight: 700; letter-spacing: -0.03em; }
 header p { color: var(--text-gray); font-size: 14px; }
 
+/* Сетка интерфейса */
 .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 25px; }
 
+/* Поля ввода и вывода */
 textarea, .result-box {
     width: 100%;
     height: 250px;
@@ -315,7 +317,7 @@ textarea, .output-display {
 .tooltip-text {
     visibility: hidden;
     opacity: 0;
-    position: fixed; /* Теперь он будет летать по всему экрану за курсором */
+    position: fixed; /* Летает по экрану за курсором */
     background-color: #1a1a1a;
     color: #fff;
     padding: 8px 14px;
@@ -326,7 +328,7 @@ textarea, .output-display {
     z-index: 10000;
     white-space: nowrap;
     transition: opacity 0.3s ease, left 0.1s ease-out, top 0.1s ease-out; /* Плавное появление/исчезновение, эффект вязкости */
-    transform: translate(-50%, -130%); /* Центрируем над курсором */
+    transform: translate(-50%, -140%); /* Центрируем над курсором */
 }
 
 */
@@ -348,6 +350,7 @@ textarea, .output-display {
     visibility: visible;
     opacity: 1;
 }
+
 
 
 
