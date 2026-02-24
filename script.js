@@ -124,31 +124,17 @@
             rephraseBtn.disabled = false;
         }
     }
-
+    // --- ЛОГИКА ПЕРЕКЛЮЧЕНИЯ ЯЗЫКА ---
    document.getElementById('languageSelect').addEventListener('change', (e) => {
     const lang = e.target.value;
     
-    // 1. Переводим все элементы с атрибутом data-i18n (заголовок, кнопки и т.д.)
+    // Перевод элементов с атрибутом data-i18n (заголовок, кнопки и т.д.)
     document.querySelectorAll('[data-i18n]').forEach(el => {
         const key = el.getAttribute('data-i18n');
-        if (translations[lang][key]) {
-            el.textContent = translations[lang][key];
-        }
+        if (translations[lang][key]) el.textContent = translations[lang][key];
     });
     
-    // 2. ПЕРЕВОД ТУЛТИПОВ (Магические уровни 1, 2, 3)
-    const segments = document.querySelectorAll('.segment');
-    segments.forEach(seg => {
-        const level = seg.getAttribute('data-level'); // Берем номер уровня (1, 2 или 3)
-        const tooltipSpan = seg.querySelector('.tooltip-text'); // Ищем спан внутри кнопки
-        
-        // Если спан найден и для этого уровня есть перевод в объекте tips
-        if (tooltipSpan && tips[level]) {
-            tooltipSpan.textContent = tips[level][lang];
-        }
-    });
-    
-    // 3. Обновляем плейсхолдер в поле ввода
+    // Обновляем плейсхолдер в поле ввода
     inputText.placeholder = lang === 'ru' ? 'Введите текст...' : 'Type or paste your text here...';
     
     // 4. Обновляем текст в поле результата, если там пусто
@@ -214,36 +200,45 @@
         });
     });
 
-   // --- УПРАВЛЕНИЕ MAGIC LEVEL И ТУЛТИПАМИ ---
+// --- УПРАВЛЕНИЕ MAGIC LEVEL И ТУЛТИПАМИ ---
+    const mSegments = document.querySelectorAll('.segment');
+    const lSelect = document.getElementById('languageSelect');
+    };
 
-const mSegments = document.querySelectorAll('.segment');
+    mSegments.forEach(segment => {
+        // 1. Клик по кнопке (активное состояние)
+        segment.addEventListener('click', () => {
+            mSegments.forEach(s => s.classList.remove('active'));
+            segment.classList.add('active');
+        });
 
-mSegments.forEach(segment => {
-    // 1. Переключение активной кнопки по клику
-    segment.addEventListener('click', () => {
-        mSegments.forEach(s => s.classList.remove('active'));
-        segment.classList.add('active');
+        // 2. Движение тултипа
+        const tooltip = segment.querySelector('.tooltip-text');
+
+        segment.addEventListener('mousemove', (e) => {
+            const lang = lSelect ? lSelect.value : 'en';
+            const level = segment.getAttribute('data-level');
+
+            // Обновляем текст тултипа перед показом
+            if (tips[level]) {
+                tooltip.textContent = tips[level][lang] || tips[level]['en'];
+            }
+
+            // Позиционируем относительно окна (clientX/Y)
+            tooltip.style.left = e.clientX + 'px';
+            tooltip.style.top = e.clientY + 'px';
+            
+            tooltip.style.visibility = 'visible';
+            tooltip.style.opacity = '1';
+        });
+
+        segment.addEventListener('mouseleave', () => {
+            tooltip.style.visibility = 'hidden';
+            tooltip.style.opacity = '0';
+        });
     });
 
-    // 2. Логика плавающего тултипа
-    const tooltip = segment.querySelector('.tooltip-text');
-
-    segment.addEventListener('mousemove', (e) => {
-        // Двигаем тултип точно за курсором
-        tooltip.style.left = e.clientX + 'px';
-        tooltip.style.top = e.clientY + 'px';
-        
-        // Показываем
-        tooltip.style.visibility = 'visible';
-        tooltip.style.opacity = '1';
-    });
-
-    segment.addEventListener('mouseleave', () => {
-        // Прячем
-        tooltip.style.visibility = 'hidden';
-        tooltip.style.opacity = '0';
-    });
-});
+})(); 
 
 
 
