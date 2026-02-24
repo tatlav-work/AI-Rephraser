@@ -214,49 +214,36 @@
         });
     });
 
-   // Переключение активного уровня Magic Level
+   // --- УПРАВЛЕНИЕ MAGIC LEVEL И ТУЛТИПАМИ ---
+
 const mSegments = document.querySelectorAll('.segment');
 
 mSegments.forEach(segment => {
+    // 1. Переключение активной кнопки по клику
     segment.addEventListener('click', () => {
         mSegments.forEach(s => s.classList.remove('active'));
         segment.classList.add('active');
     });
-});
 
-    segment.addEventListener('click', () => {
-        mSegments.forEach(s => s.classList.remove('active'));
-        segment.classList.add('active');
-    });
-});
+    // 2. Логика плавающего тултипа
+    const tooltip = segment.querySelector('.tooltip-text');
 
-
-// Находим все кнопки-сегменты
-const segments = document.querySelectorAll('.segment');
-
-segments.forEach(seg => {
-    // Находим тултип именно ВНУТРИ этой кнопки
-    const tooltip = seg.querySelector('.tooltip-text');
-
-    seg.addEventListener('mousemove', (e) => {
-        // Двигаем тултип за курсором
-        // Используем e.clientX и e.clientY для координат
+    segment.addEventListener('mousemove', (e) => {
+        // Двигаем тултип точно за курсором
         tooltip.style.left = e.clientX + 'px';
         tooltip.style.top = e.clientY + 'px';
         
-        // Показываем его
+        // Показываем
         tooltip.style.visibility = 'visible';
         tooltip.style.opacity = '1';
     });
 
-    seg.addEventListener('mouseleave', () => {
-        // Прячем, когда уходим с кнопки
+    segment.addEventListener('mouseleave', () => {
+        // Прячем
         tooltip.style.visibility = 'hidden';
         tooltip.style.opacity = '0';
     });
-});;
-
-
+});
 
 
 
