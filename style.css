@@ -318,14 +318,14 @@ textarea, .output-display {
     position: fixed; /* Теперь он будет летать по всему экрану за курсором */
     background-color: #1a1a1a;
     color: #fff;
-    padding: 6px 12px;
+    padding: 8px 14px;
     border-radius: 8px;
     font-size: 13px;
     border: 1px solid #444;
     pointer-events: none; /* Чтобы мышка не спотыкалась об сам тултип */
     z-index: 1000;
     white-space: nowrap;
-    transition: opacity 0.3s ease; /* Плавное появление/исчезновение */
+    transition: opacity 0.3s ease, left 0.1s ease-out, top 0.1s ease-out; /* Плавное появление/исчезновение, эффект вязкости */
     transform: translate(-50%, -120%); /* Центрируем над курсором */
 }
 
@@ -348,6 +348,7 @@ textarea, .output-display {
     visibility: visible;
     opacity: 1;
 }
+
 
 
 
