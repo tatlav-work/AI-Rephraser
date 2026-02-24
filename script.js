@@ -125,14 +125,37 @@
         }
     }
 
-    // Обработчик смены языка интерфейса
-    document.getElementById('languageSelect').addEventListener('change', (e) => {
-        const lang = e.target.value;
-        document.querySelectorAll('[data-i18n]').forEach(el => {
-            const key = el.getAttribute('data-i18n');
-            if (translations[lang][key]) {
-                el.textContent = translations[lang][key];
-            }
+   document.getElementById('languageSelect').addEventListener('change', (e) => {
+    const lang = e.target.value;
+    
+    // 1. Переводим все элементы с атрибутом data-i18n (заголовок, кнопки и т.д.)
+    document.querySelectorAll('[data-i18n]').forEach(el => {
+        const key = el.getAttribute('data-i18n');
+        if (translations[lang][key]) {
+            el.textContent = translations[lang][key];
+        }
+    });
+    
+    // 2. ПЕРЕВОД ТУЛТИПОВ (Магические уровни 1, 2, 3)
+    const segments = document.querySelectorAll('.segment');
+    segments.forEach(seg => {
+        const level = seg.getAttribute('data-level'); // Берем номер уровня (1, 2 или 3)
+        const tooltipSpan = seg.querySelector('.tooltip-text'); // Ищем спан внутри кнопки
+        
+        // Если спан найден и для этого уровня есть перевод в объекте tips
+        if (tooltipSpan && tips[level]) {
+            tooltipSpan.textContent = tips[level][lang];
+        }
+    });
+    
+    // 3. Обновляем плейсхолдер в поле ввода
+    inputText.placeholder = lang === 'ru' ? 'Введите текст...' : 'Type or paste your text here...';
+    
+    // 4. Обновляем текст в поле результата, если там пусто
+    if (outputText.textContent.includes("Результат") || outputText.textContent.includes("Result")) {
+        outputText.textContent = translations[lang].res_placeholder;
+    }
+});
         });
         
         inputText.placeholder = lang === 'ru' ? 'Введите текст...' : 'Type or paste your text here...';
@@ -206,6 +229,7 @@ mSegments.forEach(segment => {
         segment.classList.add('active');
     });
 });
+
 
 
 
