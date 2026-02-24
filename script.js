@@ -231,6 +231,31 @@ mSegments.forEach(segment => {
 });
 
 
+const segments = document.querySelectorAll('.segment');
+
+segments.forEach(seg => {
+    const tooltip = seg.querySelector('.tooltip-text');
+
+    seg.addEventListener('mousemove', (e) => {
+        // Получаем координаты курсора
+        const x = e.clientX;
+        const y = e.clientY;
+
+        // Двигаем тултип за мышкой
+        tooltip.style.left = x + 'px';
+        tooltip.style.top = y + 'px';
+        
+        // Делаем его видимым
+        tooltip.style.visibility = 'visible';
+        tooltip.style.opacity = '1';
+    });
+
+    seg.addEventListener('mouseleave', () => {
+        // Прячем, когда мышка уходит с кнопки
+        tooltip.style.visibility = 'hidden';
+        tooltip.style.opacity = '0';
+    });
+});
 
 
 
