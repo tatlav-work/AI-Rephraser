@@ -314,23 +314,22 @@ textarea, .output-display {
 /* Скрытый по умолчанию текст тултипа */
 .tooltip-text {
     visibility: hidden;
+    opacity: 0;
+    position: fixed; /* Теперь он будет летать по всему экрану за курсором */
     background-color: #1a1a1a;
     color: #fff;
-    text-align: center;
-    border-radius: 6px;
-    padding: 6px 10px;
-    position: absolute;
-    z-index: 10;
-    bottom: 125%; /* Показываем над кнопкой */
-    left: 50%;
-    transform: translateX(-50%);
-    white-space: nowrap;
-    font-size: 12px;
+    padding: 6px 12px;
+    border-radius: 8px;
+    font-size: 13px;
     border: 1px solid #444;
-    opacity: 0;
-    transition: opacity 0.3s;
+    pointer-events: none; /* Чтобы мышка не спотыкалась об сам тултип */
+    z-index: 1000;
+    white-space: nowrap;
+    transition: opacity 0.3s ease; /* Плавное появление/исчезновение */
+    transform: translate(-50%, -120%); /* Центрируем над курсором */
 }
 
+*/
 /* Треугольничек снизу тултипа */
 .tooltip-text::after {
     content: "";
@@ -342,12 +341,14 @@ textarea, .output-display {
     border-style: solid;
     border-color: #444 transparent transparent transparent;
 }
+*/
 
 /* Показываем при наведении на кнопку */
 .segment:hover .tooltip-text {
     visibility: visible;
     opacity: 1;
 }
+
 
 
 
