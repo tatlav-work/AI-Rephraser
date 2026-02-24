@@ -191,36 +191,22 @@
         });
     });
 
-    // Управление Magic Level и тултипом
-const mTooltip = document.getElementById('magic-tooltip');
+   // Переключение активного уровня Magic Level
 const mSegments = document.querySelectorAll('.segment');
-const lSelect = document.getElementById('languageSelect');
 
-// 3. Логика работы
 mSegments.forEach(segment => {
-    segment.addEventListener('mouseenter', () => {
-        const level = segment.getAttribute('data-level');
-        const lang = lSelect ? lSelect.value : 'en';
-        
-        mTooltip.textContent = tips[level][lang] || tips[level]['en'];
-        mTooltip.classList.add('visible');
+    segment.addEventListener('click', () => {
+        mSegments.forEach(s => s.classList.remove('active'));
+        segment.classList.add('active');
     });
-
-    segment.addEventListener('mousemove', (e) => {
-        // Двигаем тултип за курсором
-        mTooltip.style.left = (e.clientX + 15) + 'px';
-        mTooltip.style.top = (e.clientY + 15) + 'px';
-    });
-
-    segment.addEventListener('mouseleave', () => {
-        mTooltip.classList.remove('visible');
-    });
+});
 
     segment.addEventListener('click', () => {
         mSegments.forEach(s => s.classList.remove('active'));
         segment.classList.add('active');
     });
 });
+
 
 
 
