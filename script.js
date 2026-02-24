@@ -60,7 +60,7 @@
     };
 
     const tips = {
-        "1": { en: "Chill ✨", ru: "Спокойный ✨" },
+        "1": { en: "Chill ✨", ru: "Лёгкий ✨" },
     "2": { en: "Creative 🎨", ru: "Творческий 🎨" },
     "3": { en: "Wild 🔥", ru: "Дикий 🔥" }
     };
@@ -229,6 +229,7 @@ mSegments.forEach(segment => {
         segment.classList.add('active');
     });
 });
+
 
 
 
