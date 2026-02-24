@@ -326,7 +326,7 @@ textarea, .output-display {
     z-index: 1000;
     white-space: nowrap;
     transition: opacity 0.3s ease, left 0.1s ease-out, top 0.1s ease-out; /* Плавное появление/исчезновение, эффект вязкости */
-    transform: translate(-50%, -120%); /* Центрируем над курсором */
+    transform: translate(-50%, -140%); /* Центрируем над курсором */
 }
 
 */
@@ -348,6 +348,7 @@ textarea, .output-display {
     visibility: visible;
     opacity: 1;
 }
+
 
 
 
