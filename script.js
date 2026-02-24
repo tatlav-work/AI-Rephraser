@@ -231,31 +231,31 @@ mSegments.forEach(segment => {
 });
 
 
+// Находим все кнопки-сегменты
 const segments = document.querySelectorAll('.segment');
 
 segments.forEach(seg => {
+    // Находим тултип именно ВНУТРИ этой кнопки
     const tooltip = seg.querySelector('.tooltip-text');
 
     seg.addEventListener('mousemove', (e) => {
-        // Получаем координаты курсора
-        const x = e.clientX;
-        const y = e.clientY;
-
-        // Двигаем тултип за мышкой
+        // Двигаем тултип за курсором
+        // Используем e.clientX и e.clientY для координат
         tooltip.style.left = e.clientX + 'px';
         tooltip.style.top = e.clientY + 'px';
         
-        // Делаем его видимым
+        // Показываем его
         tooltip.style.visibility = 'visible';
         tooltip.style.opacity = '1';
     });
 
     seg.addEventListener('mouseleave', () => {
-        // Прячем, когда мышка уходит с кнопки
+        // Прячем, когда уходим с кнопки
         tooltip.style.visibility = 'hidden';
         tooltip.style.opacity = '0';
     });
-});
+});;
+
 
 
 
