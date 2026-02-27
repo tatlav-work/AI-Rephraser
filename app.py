@@ -1,5 +1,5 @@
 import os
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, send_from_directory
 from flask_cors import CORS
 from groq import Groq
 
@@ -10,6 +10,14 @@ CORS(app)
 API_KEY = os.environ.get("GROQ_API_KEY", "")
 client = Groq(api_key=API_KEY)
 
+@app.route('/')
+def index():
+    return send_from_directory('.', 'index.html')
+
+@app.route('/<path:path>')
+def static_files(path):
+    return send_from_directory('.', path)
+    
 @app.route('/rephrase', methods=['POST'])
 def rephrase():
     try:
@@ -51,3 +59,4 @@ def rephrase():
 if __name__ == "__main__":
     # Порт 5000 стандартный для Render
     app.run(host='0.0.0.0', port=5000)
+
