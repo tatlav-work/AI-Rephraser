@@ -11,8 +11,26 @@
 <body>
     <div class="app-container">
         <header>
-            <h1 data-i18n="title">AI Magic Rephrase ✨</h1>
-            <p data-i18n="subtitle">Transform your writing with AI magic</p>
+            <div class="header-row">
+                <div class="header-text">
+                    <div class="logo-row">
+                        <div class="logo-badge" aria-hidden="true">
+                            <span>AI</span>
+                        </div>
+                        <h1 data-i18n="title">AI Magic Rephrase ✨</h1>
+                    </div>
+                    <p data-i18n="subtitle">Transform your writing with AI magic</p>
+                </div>
+                <div class="header-lang">
+                    <div class="control-group">
+                        <label data-i18n="label_lang">Interface Language</label>
+                        <select id="languageSelect" class="control-select">
+                            <option value="en">English 🌐</option>
+                            <option value="ru">Русский 🇷🇺</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
         </header>
         
         <div class="grid">
@@ -20,6 +38,10 @@
                 <textarea id="inputText" maxlength="5000" placeholder="Type or paste your text here..."></textarea>
                 <button id="clearBtn" class="clear-input-btn" title="Clear input">&times;</button>
                 <span id="charCounter" class="char-counter">0 / 5000</span>
+                <button id="copyInlineBtn" class="copy-btn copy-btn-inline" title="Copy result">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                    <span class="copy-tooltip" data-i18n="copied">Copied! ✅</span>
+                </button>
                 <div id="limitAlert" class="limit-alert hidden" data-i18n="limit_alert">Character limit reached</div>
             </div>
             
@@ -28,11 +50,12 @@
                 
                 <button id="copyBtn" class="copy-btn" title="Copy result">
                     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                    <span class="copy-tooltip" data-i18n="copied">Copied! ✅</span>
                 </button>
                 
                 <div class="token-info">
-                    <span data-i18n="tokens_label">Tokens left:</span>
-                    <span id="tokenCount">400</span>
+                    <span data-i18n="tokens_label">Tokens:</span>
+                    <span id="tokenCount">100 (10 runs)</span>
                 </div>
                 
                 <div id="loader" class="loader-overlay hidden">
@@ -51,15 +74,6 @@
                         <option value="gpt-4o">GPT-4o (Smart)</option>
                     </select>
                 </div>
-                
-                <div class="control-group">
-                    <label data-i18n="label_lang">Interface Language</label>
-                    <select id="languageSelect" class="lang-select">
-                        <option value="en">English 🌐</option>
-                        <option value="ru">Русский 🇷🇺</option>
-                    </select>
-                </div>
-
                 <div class="control-group">
                     <label data-i18n="label_style">Style</label>
                     <select id="modeSelect" class="control-select">
@@ -69,11 +83,12 @@
                         <option value="casual" data-i18n="opt_cas">😊 Casual</option>
                         <option value="for_kids" data-i18n="opt_kids">👶 For Kids</option>
                         <option value="short" data-i18n="opt_short">⚡️ Shorten</option>
+                        <option value="custom" data-i18n="opt_custom">✨ Custom</option>
                     </select>
                 </div>
 
                 <div class="control-group">
-                    <label data-i18n="creativity_title">Creativity Level</label>
+                    <label data-i18n="creativity_title">Magic Level</label>
                     <div class="intensity-segments" id="intensityPicker">
                         <button type="button" class="segment active" data-value="1">1</button>
                         <button type="button" class="segment" data-value="2">2</button>
@@ -82,9 +97,31 @@
                     </div>
                     <input type="hidden" id="intensity" value="1">
                 </div>
+
+                <div class="control-group">
+                    <label data-i18n="label_history">History</label>
+                    <select id="historySelect" class="control-select">
+                        <option value="" data-i18n="history_empty">No history yet</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="controls-row custom-style-row hidden" id="customStyleRow">
+                <div class="control-group custom-style-group">
+                    <label data-i18n="label_custom_style">Custom style prompt</label>
+                    <input id="customStyleInput" type="text" class="custom-style-input" placeholder="Describe your custom style...">
+                </div>
             </div>
             
             <button id="rephraseBtn" data-i18n="btn_rephrase">Rephrase It! 🚀</button>
+        </div>
+
+        <div id="tokenModal" class="token-modal hidden">
+            <div class="token-modal-content">
+                <h2 data-i18n="tokens_modal_title">Magic limit reached ✨</h2>
+                <p data-i18n="tokens_modal_text">You’ve used all free runs. Continue in the full product to unlock more magic.</p>
+                <button id="tokenModalBtn" class="token-modal-btn" data-i18n="tokens_modal_cta">Go to full version</button>
+            </div>
         </div>
     </div>
     <script src="script.js"></script>
