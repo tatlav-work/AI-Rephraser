@@ -1,5 +1,5 @@
 import os
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, jsonify, send_from_directory
 from flask_cors import CORS
 from groq import Groq
 
@@ -10,6 +10,14 @@ CORS(app)
 API_KEY = os.environ.get("GROQ_API_KEY", "")
 client = Groq(api_key=API_KEY)
 
+@app.route('/')
+def index():
+    return send_from_directory('.', 'index.html')
+
+@app.route('/<path:path>')
+def static_files(path):
+    return send_from_directory('.', path)
+    
 @app.route('/rephrase', methods=['POST'])
 def rephrase():
     try:
