@@ -1,5 +1,5 @@
 import os
-from flask import Flask, request, jsonify, jsonify, send_from_directory
+from flask import Flask, request, jsonify, send_from_directory
 from flask_cors import CORS
 from groq import Groq
 
@@ -59,3 +59,4 @@ def rephrase():
 if __name__ == "__main__":
     # Порт 5000 стандартный для Render
     app.run(host='0.0.0.0', port=5000)
+
