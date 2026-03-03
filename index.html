@@ -24,10 +24,15 @@
                 <div class="header-lang">
                     <div class="control-group">
                         <label data-i18n="label_lang">Interface Language</label>
-                        <select id="languageSelect" class="control-select">
-                            <option value="en">English 🌐</option>
-                            <option value="ru">Русский 🇷🇺</option>
-                        </select>
+                        <div class="custom-dropdown">
+                            <button type="button" id="languageSelect" class="control-select dropdown-toggle" data-value="en">
+                                <span id="languageLabel">English 🌐</span>
+                            </button>
+                            <ul id="languageMenu" class="custom-dropdown-menu hidden">
+                                <li data-value="en">English 🌐</li>
+                                <li data-value="ru">Русский 🇷🇺</li>
+                            </ul>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -53,11 +58,6 @@
                     <span class="copy-tooltip" data-i18n="copied">Copied! ✅</span>
                 </button>
                 
-                <div class="token-info">
-                    <span data-i18n="tokens_label">Tokens:</span>
-                    <span id="tokenCount">100 (10 runs)</span>
-                </div>
-                
                 <div id="loader" class="loader-overlay hidden">
                     <div class="spinner"></div>
                     <span data-i18n="processing">Processing...</span>
@@ -69,22 +69,32 @@
             <div class="controls-row">
                 <div class="control-group">
                     <label data-i18n="label_model">AI Model</label>
-                    <select id="modelSelect" class="control-select">
-                        <option value="llama3-8b">Llama 3 (Fast)</option>
-                        <option value="gpt-4o">GPT-4o (Smart)</option>
-                    </select>
+                    <div class="custom-dropdown">
+                        <button type="button" id="modelSelect" class="control-select dropdown-toggle" data-value="llama3-8b">
+                            <span id="modelLabel">Llama 3 (Fast)</span>
+                        </button>
+                        <ul id="modelMenu" class="custom-dropdown-menu hidden">
+                            <li data-value="llama3-8b">Llama 3 (Fast)</li>
+                            <li data-value="gpt-4o">GPT-4o (Smart)</li>
+                        </ul>
+                    </div>
                 </div>
                 <div class="control-group">
                     <label data-i18n="label_style">Style</label>
-                    <select id="modeSelect" class="control-select">
-                        <option value="professional" data-i18n="opt_pro">💼 Professional</option>
-                        <option value="official" data-i18n="opt_off">👔 Official</option>
-                        <option value="smm" data-i18n="opt_smm">📱 Social Media</option>
-                        <option value="casual" data-i18n="opt_cas">😊 Casual</option>
-                        <option value="for_kids" data-i18n="opt_kids">👶 For Kids</option>
-                        <option value="short" data-i18n="opt_short">⚡️ Shorten</option>
-                        <option value="custom" data-i18n="opt_custom">✨ Custom</option>
-                    </select>
+                    <div class="custom-dropdown">
+                        <button type="button" id="modeSelect" class="control-select dropdown-toggle" data-value="professional">
+                            <span id="modeLabel" data-i18n="opt_pro">💼 Professional</span>
+                        </button>
+                        <ul id="modeMenu" class="custom-dropdown-menu hidden">
+                            <li data-value="professional" data-i18n="opt_pro">💼 Professional</li>
+                            <li data-value="official" data-i18n="opt_off">👔 Official</li>
+                            <li data-value="smm" data-i18n="opt_smm">📱 Social Media</li>
+                            <li data-value="casual" data-i18n="opt_cas">😊 Casual</li>
+                            <li data-value="for_kids" data-i18n="opt_kids">👶 For Kids</li>
+                            <li data-value="short" data-i18n="opt_short">⚡️ Shorten</li>
+                            <li data-value="custom" data-i18n="opt_custom">✨ Custom</li>
+                        </ul>
+                    </div>
                 </div>
 
                 <div class="control-group">
@@ -99,17 +109,23 @@
                 </div>
 
                 <div class="control-group">
-                    <label data-i18n="label_history">History</label>
-                    <select id="historySelect" class="control-select">
-                        <option value="" data-i18n="history_empty">No history yet</option>
-                    </select>
+                    <label><span data-i18n="tokens_label">Tokens:</span> <span id="tokenCount">100 (10 runs)</span></label>
+                    <div id="historyDropdown" class="custom-dropdown">
+                        <button type="button" id="historySelect" class="control-select history-empty dropdown-toggle">
+                            <span id="historyLabel" data-i18n="history_empty">No history yet</span>
+                        </button>
+                        <ul id="historyMenu" class="custom-dropdown-menu hidden"></ul>
+                    </div>
                 </div>
             </div>
 
-            <div class="controls-row custom-style-row hidden" id="customStyleRow">
+            <div class="custom-style-row hidden" id="customStyleRow">
                 <div class="control-group custom-style-group">
                     <label data-i18n="label_custom_style">Custom style prompt</label>
-                    <input id="customStyleInput" type="text" class="custom-style-input" placeholder="Describe your custom style...">
+                    <div style="position: relative;">
+                        <input id="customStyleInput" type="text" class="custom-style-input" placeholder="Describe your custom style...">
+                        <button id="clearCustomStyleBtn" class="clear-input-btn" title="Clear">&times;</button>
+                    </div>
                 </div>
             </div>
             
