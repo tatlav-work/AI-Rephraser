@@ -14,8 +14,19 @@
     const tooltip = document.getElementById('sliderTooltip');
     const tokenDisplay = document.getElementById('tokenCount');
     const historySelect = document.getElementById('historySelect');
+    const historyMenu = document.getElementById('historyMenu');
+    const historyLabel = document.getElementById('historyLabel');
+    const languageMenu = document.getElementById('languageMenu');
+    const languageLabel = document.getElementById('languageLabel');
+    const modelSelect = document.getElementById('modelSelect');
+    const modelMenu = document.getElementById('modelMenu');
+    const modelLabel = document.getElementById('modelLabel');
+    const modeSelect = document.getElementById('modeSelect');
+    const modeMenu = document.getElementById('modeMenu');
+    const modeLabel = document.getElementById('modeLabel');
     const customStyleRow = document.getElementById('customStyleRow');
     const customStyleInput = document.getElementById('customStyleInput');
+    const clearCustomStyleBtn = document.getElementById('clearCustomStyleBtn');
     const tokenModal = document.getElementById('tokenModal');
     const tokenModalBtn = document.getElementById('tokenModalBtn');
 
@@ -75,18 +86,23 @@
         "3": { en: "Wild 🔥", ru: "Дикий 🔥" }
     };
 
+    // Вспомогательная функция для текущего языка
+    function getCurrentLanguage() {
+        return languageSelect?.dataset.value || 'en';
+    }
+
     // Логика управления лимитами (токены)
     let tokens = 100;
     const TOKENS_PER_GEN = 10;
     const history = [];
 
     function updateTokenDisplay() {
-        const lang = languageSelect.value;
+        const lang = getCurrentLanguage();
         const gensLeft = Math.floor(tokens / TOKENS_PER_GEN);
         if (lang === 'ru') {
             tokenDisplay.textContent = `${tokens} (${gensLeft} генераций)`;
         } else {
-            tokenDisplay.textContent = `${tokens} (${gensLeft} runs)`;
+            tokenDisplay.textContent = `${tokens} (${gensLeft} converts)`;
         }
     }
 
@@ -107,42 +123,60 @@
     }
 
     function renderHistory() {
-        if (!historySelect) return;
+        if (!historySelect || !historyMenu || !historyLabel) return;
         const lang = languageSelect.value;
-        historySelect.innerHTML = '';
-        const baseOption = document.createElement('option');
-        baseOption.value = '';
-        baseOption.textContent = lang === 'ru' ? 'История пуста' : 'No history yet';
-        historySelect.appendChild(baseOption);
+        historyMenu.innerHTML = '';
+
+        if (history.length === 0) {
+            historySelect.classList.add('history-empty');
+            historyLabel.textContent = lang === 'ru' ? 'История пуста' : 'No history yet';
+            return;
+        }
+
+        historySelect.classList.remove('history-empty');
+        historyLabel.textContent = lang === 'ru' ? 'История' : 'History';
 
         history.forEach((item, index) => {
-            const opt = document.createElement('option');
-            opt.value = String(index);
-            const labelBase = lang === 'ru' ? 'Запрос' : 'Run';
-            opt.textContent = `${labelBase} #${history.length - index}`;
-            historySelect.appendChild(opt);
+            const li = document.createElement('li');
+            li.dataset.index = String(index);
+            const labelBase = lang === 'ru' ? 'Конвертация' : 'Convert';
+            li.textContent = `${labelBase} #${history.length - index}`;
+            historyMenu.appendChild(li);
         });
     }
 
     // Основная функция запроса к API
     async function startRephrasing() {
         const text = inputText.value.trim();
-        const currentLang = languageSelect.value;
+        const currentLang = getCurrentLanguage();
 
         if (!text || rephraseBtn.disabled) return;
         
         if (!updateTokens()) return;
 
-        const styleValue = document.getElementById('modeSelect').value;
+        const styleValue = modeSelect?.dataset.value || 'professional';
+        const customStyle = customStyleInput ? customStyleInput.value.trim() : '';
+
+        let promptText = text;
+
+        if (styleValue === 'custom' && customStyle) {
+            const instruction =
+                currentLang === 'ru'
+                    ? `Перефразируй текст ниже с учётом этих дополнительных инструкций по стилю: "${customStyle}". Не упоминай сами инструкции в ответе.`
+                    : `Rephrase the text below following these additional style instructions: "${customStyle}". Do not mention the instructions themselves in the output.`;
+
+            promptText = `${instruction}\n\n---\n${text}`;
+        }
+
         const payload = {
-            text: text,
+            text: promptText,
             style: styleValue,
             language: currentLang,
             intensity: intensityHiddenInput.value
         };
 
-        if (styleValue === 'custom') {
-            payload.customStyle = customStyleInput ? customStyleInput.value.trim() : '';
+        if (styleValue === 'custom' && customStyle) {
+            payload.customStyle = customStyle;
         }
 
         loader.classList.remove('hidden');
@@ -185,9 +219,7 @@
         }
     }
 
-    // Обработчик смены языка интерфейса
-    languageSelect.addEventListener('change', (e) => {
-        const lang = e.target.value;
+    function applyLanguage(lang) {
         document.querySelectorAll('[data-i18n]').forEach(el => {
             const key = el.getAttribute('data-i18n');
             if (translations[lang][key]) {
@@ -202,7 +234,30 @@
 
         updateTokenDisplay();
         renderHistory();
-    });
+    }
+
+    // Обработчик смены языка интерфейса через кастомный дропдаун
+    if (languageSelect && languageMenu && languageLabel) {
+        languageSelect.dataset.value = languageSelect.dataset.value || 'en';
+
+        languageSelect.addEventListener('click', () => {
+            languageMenu.classList.toggle('hidden');
+        });
+
+        languageMenu.addEventListener('click', (e) => {
+            const li = e.target.closest('li');
+            if (!li) return;
+            const value = li.dataset.value;
+            if (!value) return;
+            languageSelect.dataset.value = value;
+            languageLabel.textContent = li.textContent;
+            languageMenu.classList.add('hidden');
+            applyLanguage(value);
+        });
+    } else if (languageSelect) {
+        // fallback для безопасности, если меню не инициализировалось
+        languageSelect.addEventListener('change', (e) => applyLanguage(e.target.value));
+    }
 
     // Мониторинг ввода текста
     inputText.addEventListener('input', () => {
@@ -234,11 +289,19 @@
         inputText.focus();
     });
 
+    // Очистка кастомного стиля
+    if (clearCustomStyleBtn && customStyleInput) {
+        clearCustomStyleBtn.addEventListener('click', () => {
+            customStyleInput.value = '';
+            customStyleInput.focus();
+        });
+    }
+
     // Копирование в буфер обмена с визуальным тултипом
     function handleCopyClick(event) {
         const btn = event.currentTarget;
         const text = outputText.textContent;
-        const lang = languageSelect.value;
+        const lang = getCurrentLanguage();
         const placeholder = translations[lang].res_placeholder;
 
         if (!text || text === placeholder) return;
@@ -279,25 +342,70 @@
         intensityHiddenInput.value = btn.dataset.value;
     });
 
-    if (historySelect) {
-        historySelect.addEventListener('change', (e) => {
-            const idx = e.target.value;
-            if (idx === '') return;
+    if (historySelect && historyMenu) {
+        historySelect.addEventListener('click', () => {
+            historyMenu.classList.toggle('hidden');
+        });
+
+        historyMenu.addEventListener('click', (e) => {
+            const li = e.target.closest('li');
+            if (!li) return;
+            const idx = li.dataset.index;
+            if (idx === undefined) return;
             const item = history[Number(idx)];
             if (!item) return;
             outputText.textContent = item.output;
+            historyMenu.classList.add('hidden');
         });
     }
 
-    document.getElementById('modeSelect').addEventListener('change', (e) => {
-        const value = e.target.value;
-        if (!customStyleRow) return;
-        if (value === 'custom') {
-            customStyleRow.classList.remove('hidden');
-        } else {
-            customStyleRow.classList.add('hidden');
-        }
-    });
+    // Кастомный дропдаун для модели
+    if (modelSelect && modelMenu && modelLabel) {
+        modelSelect.addEventListener('click', () => {
+            modelMenu.classList.toggle('hidden');
+        });
+
+        modelMenu.addEventListener('click', (e) => {
+            const li = e.target.closest('li');
+            if (!li) return;
+            const value = li.dataset.value;
+            if (!value) return;
+            modelSelect.dataset.value = value;
+            modelLabel.textContent = li.textContent;
+            modelMenu.classList.add('hidden');
+        });
+    }
+
+    // Кастомный дропдаун для стиля
+    if (modeSelect && modeMenu && modeLabel) {
+        modeSelect.addEventListener('click', () => {
+            modeMenu.classList.toggle('hidden');
+        });
+
+        modeMenu.addEventListener('click', (e) => {
+            const li = e.target.closest('li');
+            if (!li) return;
+            const value = li.dataset.value;
+            if (!value) return;
+            modeSelect.dataset.value = value;
+            modeLabel.textContent = li.textContent;
+
+            const i18nKey = li.getAttribute('data-i18n');
+            if (i18nKey) {
+                modeLabel.setAttribute('data-i18n', i18nKey);
+            }
+
+            if (customStyleRow) {
+                if (value === 'custom') {
+                    customStyleRow.classList.remove('hidden');
+                } else {
+                    customStyleRow.classList.add('hidden');
+                }
+            }
+
+            modeMenu.classList.add('hidden');
+        });
+    }
 
     if (tokenModalBtn) {
         tokenModalBtn.addEventListener('click', () => {
