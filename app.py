@@ -3,7 +3,7 @@ import io
 from flask import Flask, request, jsonify, send_from_directory
 from flask_cors import CORS
 from groq import Groq
-import pdfplumber
+import fitz  # pymupdf
 
 app = Flask(__name__)
 CORS(app)
@@ -66,12 +66,11 @@ def extract_pdf():
             return jsonify({"error": "No file provided"}), 400
         
         pdf_bytes = file.read()
+        doc = fitz.open(stream=pdf_bytes, filetype="pdf")
         text = ''
-        with pdfplumber.open(io.BytesIO(pdf_bytes)) as pdf:
-            for page in pdf.pages:
-                page_text = page.extract_text()
-                if page_text:
-                    text += page_text + '\n'
+        for page in doc:
+            text += page.get_text() + '\n'
+        doc.close()
         
         if not text.strip():
             return jsonify({"error": "no_text"}), 422
