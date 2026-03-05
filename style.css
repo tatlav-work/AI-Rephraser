@@ -16,11 +16,14 @@
 
 #historySelect {
     border-radius: 10px;
+    padding-left: 15px;
+    text-align: left;
+    justify-content: flex-start;
 }
 
 .custom-dropdown {
     position: relative;
-    font-size: 15px;
+    font-size: 14px;
 }
 
 .custom-dropdown-menu {
@@ -44,12 +47,15 @@
     padding: 8px 12px;
     cursor: pointer;
     color: #ffffff;
-    font-size: 15px;
+    font-size: 14px;
     font-weight: 400;
     line-height: 1;
     display: flex;
     align-items: center;
     gap: 8px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .custom-dropdown-menu li:hover {
@@ -60,6 +66,9 @@
     display: flex;
     align-items: center;
     gap: 8px;
+    padding-left: 15px;
+    text-align: left;
+    justify-content: flex-start;
 }
 
 #modeLabel {
@@ -96,12 +105,15 @@ body {
     max-width: 950px;
 }
 
-header { text-align: left; margin-bottom: 25px; }
+header { 
+    text-align: left; 
+    margin-bottom: 25px; 
+}
 
 .logo-row {
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 12px;
 }
 
 .logo-badge {
@@ -125,19 +137,19 @@ header { text-align: left; margin-bottom: 25px; }
 .header-row {
     display: flex;
     justify-content: space-between;
-    align-items: flex-end; /* низ селектора на уровне подзаголовка */
+    align-items: flex-end; 
     gap: 24px;
 }
 
 .header-text h1 {
     margin: 0;
-    font-size: 32px;
+    font-size: 36px;
     font-weight: 700;
     letter-spacing: -0.03em;
 }
 
 .header-text p {
-    margin: 6px 0 0 0;
+    margin: 4px 0 0 0;
     color: var(--text-gray);
     font-size: 14px;
 }
@@ -156,9 +168,12 @@ header { text-align: left; margin-bottom: 25px; }
 textarea, .result-box {
     width: 100%;
     height: 250px;
-    padding: 20px;
+    padding-top: 20px;
+    padding-left: 20px;
+    padding-right: 24px;
+    padding-bottom: 90px;
     border-radius: 12px;
-    font-family: 'Geist Mono', monospace !important; 
+    font-family: 'Geist Mono', monospace;
     font-size: 15px;
     line-height: 1.6;
     letter-spacing: -0.01em;
@@ -169,12 +184,14 @@ textarea, .result-box {
     overflow-wrap: anywhere; /* Принудительный перенос */
     overflow-y: auto;
     overflow-x: hidden;
+    scrollbar-gutter: stable;
 }
 
 textarea { 
     background: #000; 
     border: 1px solid rgba(255, 255, 255, 0.2); 
     outline: none; 
+    padding-bottom: 90px;
 }
 
 .result-box { 
@@ -186,17 +203,29 @@ textarea {
         0 0 30px rgba(120, 90, 255, 0.55),
         0 0 80px rgba(38, 148, 255, 0.35);
     background-image: radial-gradient(circle at 0% 0%, rgba(120, 90, 255, 0.25), transparent 60%);
+    font-family: 'Geist Mono', monospace;
+    padding-right: 12px;
+    scrollbar-gutter: stable;
 }
 
-.textarea-wrapper { position: relative; width: 100%; }
+.textarea-wrapper { 
+    position: relative;
+    width: 100%;
+    height: 250px;
+    border-radius: 12px;
+    overflow: visible;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    background: #000;
+}
 
 .char-counter {
     position: absolute;
-    top: 12px;
-    right: 15px;
+    bottom: 14px;
+    right: 52px;
+    top: auto;
     font-size: 12px;
     color: var(--text-gray);
-    z-index: 2;
+    z-index: 3;
 }
 
 .char-counter.warning { color: #ff4d4d; font-weight: bold; }
@@ -216,16 +245,25 @@ textarea {
 
 .controls-row {
     display: grid;
-    grid-template-columns: 1fr 0.9fr 1.1fr 1fr;
+    grid-template-columns: minmax(100px, 1fr) minmax(100px, 0.9fr) minmax(110px, 1.1fr) minmax(100px, 1fr);
     gap: 15px;
     width: 100%;
     margin-bottom: 30px;
     align-items: flex-end;
 }
 
-.control-group label { display: block; font-size: 13px; color: var(--text-gray); margin-bottom: 10px; }
+.control-group label { 
+    display: block; 
+    font-size: 13px; 
+    color: var(--text-gray); 
+    margin-bottom: 10px; 
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
 
-.control-select {
+.control-select,
+.dropdown-toggle {
     width: 100%;
     height: 44px;
     background: #252525;
@@ -235,9 +273,33 @@ textarea {
     color: #fff;
     outline: none;
     appearance: none;
+    font-size: 14px;
+    font-weight: 400;
+    text-align: left;
+    justify-content: flex-start;
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='white' viewBox='0 0 16 16'%3E%3Cpath d='M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z'/%3E%3C/svg%3E");
     background-repeat: no-repeat;
     background-position: right 15px center;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+#modeSelect {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding-left: 15px;
+    text-align: left;
+    justify-content: flex-start;
+}
+
+#modeLabel {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    flex: 1;
+    min-width: 0;
 }
 
 .custom-style-row {
@@ -307,21 +369,19 @@ textarea {
 }
 
 .slider-tooltip {
-    position: fixed;
+    position: fixed !important;
+    z-index: 99999 !important;
     pointer-events: none;
     background: rgba(35, 35, 35, 0.98);
     color: #fff;
     padding: 8px 14px;
     border-radius: 8px;
     font-size: 12px;
-    z-index: 10000;
     box-shadow: 0 10px 25px rgba(0,0,0,0.5);
     visibility: hidden;
     opacity: 0;
-    transform: translate(-50%, -140%);
+    white-space: nowrap;
 }
-
-.intensity-segments:hover .slider-tooltip { visibility: visible; opacity: 1; }
 
 .loader-overlay {
     position: absolute;
@@ -338,13 +398,51 @@ textarea {
     backdrop-filter: blur(4px);
 }
 
-.spinner {
-    width: 30px;
-    height: 30px;
-    border: 3px solid rgba(77, 58, 251, 0.2);
+.loader {
+    border: 3px solid rgba(255, 255, 255, 0.1);
     border-top: 3px solid var(--primary);
     border-radius: 50%;
+    width: 40px;
+    height: 40px;
     animation: spin 1s linear infinite;
+}
+
+.magic-stars {
+    position: relative;
+    width: 80px;
+    height: 80px;
+}
+
+.magic-star {
+    position: absolute;
+    font-size: 24px;
+    animation: starFloat 1.5s ease-in-out infinite;
+    opacity: 0;
+}
+
+.s1 { top: 0; left: 30px; animation-delay: 0s; }
+.s2 { top: 20px; left: 0; animation-delay: 0.3s; font-size: 16px; }
+.s3 { top: 20px; left: 60px; animation-delay: 0.6s; font-size: 16px; }
+.s4 { top: 50px; left: 15px; animation-delay: 0.9s; font-size: 20px; }
+.s5 { top: 50px; left: 50px; animation-delay: 1.2s; font-size: 14px; }
+
+@keyframes starFloat {
+    0% { opacity: 0; transform: translateY(0) scale(0.5); }
+    50% { opacity: 1; transform: translateY(-10px) scale(1.2); }
+    100% { opacity: 0; transform: translateY(-20px) scale(0.5); }
+}
+
+.magic-text {
+    color: #fff;
+    font-size: 15px;
+    font-weight: 500;
+    letter-spacing: 0.05em;
+    animation: textPulse 1.5s ease-in-out infinite;
+}
+
+@keyframes textPulse {
+    0%, 100% { opacity: 0.6; }
+    50% { opacity: 1; }
 }
 
 @keyframes spin { to { transform: rotate(360deg); } }
@@ -353,11 +451,23 @@ button#rephraseBtn {
     display: block; width: 100%; max-width: 360px; margin: 0 auto;
     background: var(--primary); color: #fff; padding: 18px 0;
     border-radius: 16px; border: none; font-size: 16px; font-weight: 600; cursor: pointer;
+    transition: transform 0.2s ease, box-shadow 0.2s ease, filter 0.2s ease;
+}
+
+#rephraseBtn:hover {
+    transform: translateY(-2px) scale(1.02);
+    box-shadow: 0 8px 30px rgba(77, 58, 251, 0.6);
+    filter: brightness(1.1);
+}
+
+#rephraseBtn:active {
+    transform: translateY(1px) scale(0.99);
 }
 
 .copy-btn {
     position: absolute;
-    top: 15px;
+    top: auto;
+    bottom: 12px;
     right: 15px;
     background: rgba(148, 163, 184, 0.25);
     border: 1px solid var(--border-color);
@@ -416,8 +526,9 @@ button#rephraseBtn {
 
 .clear-input-btn {
     position: absolute;
-    top: 12px;
-    right: 48px;
+    bottom: 12px;
+    right: 15px;
+    top: auto;
     background: rgba(255, 255, 255, 0.05);
     border: 1px solid var(--border-color);
     color: var(--text-gray);
@@ -433,6 +544,35 @@ button#rephraseBtn {
     z-index: 5;
 }
 
+.upload-doc-btn {
+    position: absolute;
+    bottom: 12px;
+    left: 15px;
+    background: #252525;
+    border: 1px solid var(--border-color);
+    color: var(--text-gray);
+    padding: 6px 10px;
+    border-radius: 6px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    transition: all 0.2s;
+    z-index: 3;
+}
+
+.upload-doc-btn:hover {
+    background: rgba(77, 58, 251, 0.2);
+    color: #fff;
+    border-color: var(--primary);
+}
+
+.upload-doc-btn svg {
+    width: 16px;
+    height: 16px;
+}
+
 .clear-input-btn:hover {
     background: #ff4d4d;
     color: white;
@@ -441,9 +581,48 @@ button#rephraseBtn {
 
 /* Смещаем внутренние отступы, чтобы текст не залезал под кнопки и счетчик */
 textarea {
-    padding-top: 46px;
     padding-right: 70px;
-    padding-bottom: 52px;
+    padding-left: 15px;
+    padding-bottom: 90px;
+}
+
+textarea::-webkit-scrollbar {
+    width: 4px;
+}
+
+textarea::-webkit-scrollbar-track {
+    background: transparent;
+    margin-top: 8px;
+    margin-bottom: 8px;
+    margin-right: 4px;
+}
+
+textarea::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 4px;
+}
+
+textarea::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.3);
+}
+
+.result-box::-webkit-scrollbar {
+    width: 4px;
+}
+
+.result-box::-webkit-scrollbar-track {
+    background: transparent;
+    margin-top: 12px;
+    margin-bottom: 52px;
+}
+
+.result-box::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 4px;
+}
+
+.result-box::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.3);
 }
 
 .result-box {
@@ -489,7 +668,7 @@ button, select, .intensity-btn, .copy-btn, .clear-btn {
 
 .token-info {
     position: absolute;
-    bottom: 10px;
+    bottom: 14px;
     left: 15px;
     font-size: 12px;
     color: var(--text-gray);
@@ -546,4 +725,23 @@ button, select, .intensity-btn, .copy-btn, .clear-btn {
 
 .token-modal-btn:hover {
     filter: brightness(1.05);
+}
+
+/* FORCE text boundary - must be last rule */
+textarea {
+    border: none;
+    background: transparent;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 52px;
+    width: 100%;
+    height: auto;
+    padding: 20px;
+    padding-right: 12px;
+    box-sizing: border-box;
+    border-radius: 0;
+    outline: none;
+    scrollbar-gutter: stable;
 }
