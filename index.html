@@ -7,6 +7,8 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js"></script>
 </head>
 <body>
     <div class="app-container">
@@ -17,9 +19,9 @@
                         <div class="logo-badge" aria-hidden="true">
                             <span>AI</span>
                         </div>
-                        <h1 data-i18n="title">AI Magic Rephrase ✨</h1>
+                        <h1 data-i18n="title">AI Rephraser ✨</h1>
                     </div>
-                    <p data-i18n="subtitle">Transform your writing with AI magic</p>
+                    <p data-i18n="subtitle" style="padding-left: 42px;">Transform your writing with AI magic</p>
                 </div>
                 <div class="header-lang">
                     <div class="control-group">
@@ -42,11 +44,11 @@
             <div class="textarea-wrapper">
                 <textarea id="inputText" maxlength="5000" placeholder="Type or paste your text here..."></textarea>
                 <button id="clearBtn" class="clear-input-btn" title="Clear input">&times;</button>
-                <span id="charCounter" class="char-counter">0 / 5000</span>
-                <button id="copyInlineBtn" class="copy-btn copy-btn-inline" title="Copy result">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
-                    <span class="copy-tooltip" data-i18n="copied">Copied! ✅</span>
+                <button id="uploadDocBtn" class="upload-doc-btn">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg> Upload Doc
                 </button>
+                <input type="file" id="fileUploadInput" accept=".txt,.pdf,.doc,.docx" style="display:none">
+                <span id="charCounter" class="char-counter">0 / 5000</span>
                 <div id="limitAlert" class="limit-alert hidden" data-i18n="limit_alert">Character limit reached</div>
             </div>
             
@@ -59,8 +61,14 @@
                 </button>
                 
                 <div id="loader" class="loader-overlay hidden">
-                    <div class="spinner"></div>
-                    <span data-i18n="processing">Processing...</span>
+                    <div class="magic-stars">
+                        <span class="magic-star s1">✨</span>
+                        <span class="magic-star s2">✦</span>
+                        <span class="magic-star s3">✨</span>
+                        <span class="magic-star s4">✦</span>
+                        <span class="magic-star s5">✨</span>
+                    </div>
+                    <span class="magic-text" data-i18n="processing">Магия происходит...</span>
                 </div>
             </div>
         </div> 
@@ -109,7 +117,7 @@
                 </div>
 
                 <div class="control-group">
-                    <label><span data-i18n="tokens_label">Tokens:</span> <span id="tokenCount">100 (10 runs)</span></label>
+                    <label><span id="tokenCount">10 tasks | 100 tokens</span></label>
                     <div id="historyDropdown" class="custom-dropdown">
                         <button type="button" id="historySelect" class="control-select history-empty dropdown-toggle">
                             <span id="historyLabel" data-i18n="history_empty">No history yet</span>

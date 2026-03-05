@@ -1,7 +1,9 @@
 import os
+import io
 from flask import Flask, request, jsonify, send_from_directory
 from flask_cors import CORS
 from groq import Groq
+import pdfplumber
 
 app = Flask(__name__)
 CORS(app)
@@ -54,6 +56,28 @@ def rephrase():
     
     except Exception as e:
         print(f"Error occurred: {str(e)}") # Логируем ошибку для отладки
+        return jsonify({"error": str(e)}), 500
+
+@app.route('/extract-pdf', methods=['POST'])
+def extract_pdf():
+    try:
+        file = request.files.get('file')
+        if not file:
+            return jsonify({"error": "No file provided"}), 400
+        
+        pdf_bytes = file.read()
+        text = ''
+        with pdfplumber.open(io.BytesIO(pdf_bytes)) as pdf:
+            for page in pdf.pages:
+                page_text = page.extract_text()
+                if page_text:
+                    text += page_text + '\n'
+        
+        if not text.strip():
+            return jsonify({"error": "no_text"}), 422
+            
+        return jsonify({"text": text[:5000]})
+    except Exception as e:
         return jsonify({"error": str(e)}), 500
 
 if __name__ == "__main__":
