@@ -82,7 +82,7 @@
     --bg-container: #1a1a1a;
     --text-main: #ffffff;
     --text-gray: #888888;
-    --border-color: rgba(255, 255, 255, 0.1);
+    --border-color: rgba(255, 255, 255, 0.15);
 }
 
 body {
@@ -98,7 +98,7 @@ body {
 
 .app-container {
     background: var(--bg-container);
-    padding: 40px;
+    padding: clamp(16px, 3vw, 40px);
     border-radius: 24px;
     border: 1px solid var(--border-color);
     width: 95%;
@@ -143,7 +143,7 @@ header {
 
 .header-text h1 {
     margin: 0;
-    font-size: 36px;
+    font-size: clamp(20px, 3vw, 32px);
     font-weight: 700;
     letter-spacing: -0.03em;
 }
@@ -163,7 +163,12 @@ header {
     width: 147px;
 }
 
-.grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 25px; }
+.grid { 
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 20px;
+    margin-bottom: 25px;
+}
 
 textarea, .result-box {
     width: 100%;
@@ -245,7 +250,7 @@ textarea {
 
 .controls-row {
     display: grid;
-    grid-template-columns: minmax(100px, 1fr) minmax(100px, 0.9fr) minmax(110px, 1.1fr) minmax(100px, 1fr);
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
     gap: 15px;
     width: 100%;
     margin-bottom: 30px;
@@ -323,6 +328,20 @@ textarea {
     color: #fff;
     outline: none;
     font-size: 14px;
+}
+
+#customStyleInput,
+#customStyleInput:hover,
+#customStyleInput:focus,
+#customStyleInput:active,
+#customStyleInput:-webkit-autofill,
+#customStyleInput:-webkit-autofill:hover,
+#customStyleInput:-webkit-autofill:focus {
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    outline: none !important;
+    box-shadow: none !important;
+    -webkit-box-shadow: 0 0 0px 1000px #252525 inset !important;
+    -webkit-text-fill-color: #fff !important;
 }
 
 #customStyleInput {
@@ -448,9 +467,18 @@ textarea {
 @keyframes spin { to { transform: rotate(360deg); } }
 
 button#rephraseBtn {
-    display: block; width: 100%; max-width: 360px; margin: 0 auto;
-    background: var(--primary); color: #fff; padding: 18px 0;
-    border-radius: 16px; border: none; font-size: 16px; font-weight: 600; cursor: pointer;
+    display: block;
+    width: 100%;
+    max-width: min(360px, 100%);
+    margin: 0 auto;
+    background: var(--primary);
+    color: #fff;
+    padding: 18px 0;
+    border-radius: 16px;
+    border: none;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
     transition: transform 0.2s ease, box-shadow 0.2s ease, filter 0.2s ease;
 }
 
@@ -661,6 +689,101 @@ button, select, .intensity-btn, .copy-btn, .clear-btn {
     .input-box, .output-box {
         width: 100% !important;
     }
+}
+
+@media (max-width: 480px) {
+    .header-row {
+        display: grid;
+        grid-template-columns: 1fr auto;
+        grid-template-rows: auto auto;
+        gap: 0;
+        align-items: end;
+    }
+
+    .header-text {
+        grid-column: 1;
+        grid-row: 1 / 3;
+    }
+
+    .header-lang {
+        grid-column: 2;
+        grid-row: 2;
+        justify-self: end;
+        align-self: end;
+        margin-right: 0;
+        min-width: 120px;
+    }
+
+    .header-lang .control-group,
+    .header-lang .control-select {
+        width: 100%;
+        min-width: 120px;
+    }
+
+    .header-text h1 {
+        font-size: clamp(18px, 5vw, 28px);
+        white-space: nowrap;
+    }
+
+    .logo-badge {
+        min-width: 32px;
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+    }
+
+    .logo-row {
+        flex-wrap: nowrap;
+        align-items: center;
+    }
+}
+
+/* ===== FLUID LANGUAGE SELECTOR ===== */
+
+.header-lang {
+    grid-column: 2;
+    grid-row: 2;
+    align-self: end;
+    justify-self: end;
+    margin-right: 0;
+    padding-right: 0;
+}
+
+.header-lang label {
+    display: none;
+}
+
+.header-lang #languageSelect {
+    padding: clamp(6px, 1vw, 10px) clamp(8px, 1.5vw, 12px);
+    font-size: clamp(11px, 1.3vw, 14px);
+    width: 100%;
+    max-width: clamp(100px, 20vw, 280px);
+    display: flex;
+    align-items: center;
+    gap: clamp(2px, 0.5vw, 4px);
+    padding-right: clamp(4px, 0.8vw, 6px);
+}
+
+.header-lang #languageSelect::after {
+    content: '▼';
+    font-size: clamp(8px, 1vw, 10px);
+}
+
+.header-lang .dropdown-toggle::after {
+    display: none;
+}
+
+#languageLabel {
+    flex: 1;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: none;
+}
+
+.header-lang .custom-dropdown-menu li {
+    padding: clamp(6px, 1vw, 8px) clamp(10px, 1.5vw, 12px);
+    font-size: clamp(11px, 1.2vw, 13px);
 }
 
 /* 5. Исправление наезда текста на кнопки (внутренний отступ) */
