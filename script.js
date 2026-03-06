@@ -56,7 +56,9 @@
             opt_short: "⚡️ Shorten",
             res_placeholder: "Result will appear here...",
             copy_tooltip: "Copy result",
-            copied: "Copied! ✅"
+            copied: "Copied! ✅",
+            custom_style_placeholder: "Describe your custom style...",
+            upload_doc: "Upload Doc"
         },
         ru: {
             title: "AI Рефразер ✨",
@@ -79,7 +81,10 @@
             opt_short: "⚡️ Сократить",
             res_placeholder: "Результат появится здесь...",
             copy_tooltip: "Скопировать результат",
-            copied: "Скопировано! ✅"
+            copied: "Скопировано! ✅",
+            label_custom_style: "Кастомный стиль",
+            custom_style_placeholder: "Опишите свой стиль...",
+            upload_doc: "Загрузить документ"
         }
     };
 
@@ -237,6 +242,8 @@
         if (outputText.textContent.includes("Результат") || outputText.textContent.includes("Result")) {
             outputText.textContent = translations[lang].res_placeholder;
         }
+        customStyleInput.placeholder = lang === 'ru' ? 'Опишите свой стиль...' : 'Describe your custom style...';
+        uploadDocBtn.querySelector('span') && (uploadDocBtn.querySelector('span').textContent = translations[lang].upload_doc);
 
         updateTokenDisplay();
         renderHistory();
