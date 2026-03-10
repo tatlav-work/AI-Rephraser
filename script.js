@@ -333,9 +333,9 @@
     // Мониторинг ввода текста
     inputText.addEventListener('input', () => {
         let count = inputText.value.length;
-        charCounter.textContent = `${count} / 5000`;
+        charCounter.textContent = `${count} / 10000`;
         
-        if (count >= 5000) {
+        if (count >= 10000) {
             charCounter.classList.add('warning');
             limitAlert.classList.remove('hidden');
         } else {
@@ -416,7 +416,7 @@
     // Очистка поля ввода
     clearBtn.addEventListener('click', () => {
         inputText.value = "";
-        charCounter.textContent = "0 / 5000";
+        charCounter.textContent = "0 / 10000";
         inputText.focus();
     });
 
@@ -428,32 +428,12 @@
         });
     }
 
-    // Копирование в буфер обмена с визуальным тултипом
-    function handleCopyClick(event) {
-        const btn = event.currentTarget;
-        const text = outputText.textContent;
-        const lang = getCurrentLanguage();
-        const placeholder = translations[lang].res_placeholder;
-
-        if (!text || text === placeholder) return;
-        
-        navigator.clipboard.writeText(text).then(() => {
-            const tooltipEl = btn.querySelector('.copy-tooltip');
-            btn.classList.add('success');
-            if (tooltipEl) {
-                tooltipEl.textContent = translations[lang].copied;
-                btn.classList.add('show-tooltip');
-            }
-
-            setTimeout(() => {
-                btn.classList.remove('success');
-                btn.classList.remove('show-tooltip');
-            }, 1600);
-        });
-    }
-
-    copyButtons.forEach(btn => {
-        btn.addEventListener('click', handleCopyClick);
+    copyBtn.addEventListener('click', () => {
+        navigator.clipboard.writeText(outputText.value);
+        copyBtn.querySelector('svg').outerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>`;
+        setTimeout(() => {
+            copyBtn.querySelector('svg').outerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>`;
+        }, 2000);
     });
 
     // Управление уровнем креативности

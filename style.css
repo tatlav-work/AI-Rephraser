@@ -555,27 +555,6 @@ button#rephraseBtn {
     top: auto;
 }
 
-.copy-tooltip {
-    position: absolute;
-    bottom: -30px;
-    right: 0;
-    background: rgba(17, 24, 39, 0.95);
-    color: #e5e7eb;
-    padding: 4px 8px;
-    border-radius: 6px;
-    font-size: 11px;
-    white-space: nowrap;
-    opacity: 0;
-    transform: translateY(4px);
-    pointer-events: none;
-    transition: opacity 0.15s ease, transform 0.15s ease;
-    border: 1px solid rgba(75, 85, 99, 0.8);
-}
-
-.copy-btn.show-tooltip .copy-tooltip {
-    opacity: 1;
-    transform: translateY(0);
-}
 .hidden { display: none !important; }
 
 .clear-input-btn {
