@@ -147,11 +147,9 @@
         history.forEach((item, index) => {
             const li = document.createElement('li');
             li.dataset.index = String(index);
-            if (lang === 'ru') {
-                li.textContent = `№${history.length - index}`;
-            } else {
-                li.textContent = `Convert #${history.length - index}`;
-            }
+            const itemName = item.output.substring(0, 40).trim() + (item.output.length > 40 ? '...' : '');
+            li.textContent = itemName || (lang === 'ru' ? 'Без названия' : 'Untitled');
+            li.title = item.output;
             historyMenu.appendChild(li);
         });
     }
@@ -433,6 +431,7 @@
 
     if (historySelect && historyMenu) {
         historySelect.addEventListener('click', () => {
+            if (history.length === 0) return; // Block if empty
             historyMenu.classList.toggle('hidden');
         });
 
@@ -444,6 +443,7 @@
             const item = history[Number(idx)];
             if (!item) return;
             outputText.textContent = item.output;
+            historyLabel.textContent = li.textContent; // Update label to selected item name
             historyMenu.classList.add('hidden');
         });
     }
