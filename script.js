@@ -333,9 +333,9 @@
     // Мониторинг ввода текста
     inputText.addEventListener('input', () => {
         let count = inputText.value.length;
-        charCounter.textContent = `${count} / 5000`;
+        charCounter.textContent = `${count} / 10000`;
         
-        if (count >= 5000) {
+        if (count >= 10000) {
             charCounter.classList.add('warning');
             limitAlert.classList.remove('hidden');
         } else {
@@ -416,7 +416,7 @@
     // Очистка поля ввода
     clearBtn.addEventListener('click', () => {
         inputText.value = "";
-        charCounter.textContent = "0 / 5000";
+        charCounter.textContent = "0 / 10000";
         inputText.focus();
     });
 
