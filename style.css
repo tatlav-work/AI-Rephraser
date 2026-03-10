@@ -457,6 +457,39 @@ textarea {
     50% { opacity: 1; }
 }
 
+.info-icon {
+    cursor: pointer;
+    color: rgba(99, 102, 241, 0.7);
+    margin-left: 4px;
+}
+
+.info-icon:hover {
+    color: rgba(99, 102, 241, 1);
+}
+
+#modelTooltip {
+    position: absolute;
+    background: #1e1e2e;
+    color: #e2e8f0;
+    border: 1px solid rgba(99, 102, 241, 0.4);
+    border-radius: 8px;
+    padding: 8px 12px;
+    font-size: 13px;
+    line-height: 1.6;
+    white-space: nowrap;
+    pointer-events: none;
+    opacity: 0;
+    transform: translateY(4px);
+    transition: opacity 0.15s ease, transform 0.15s ease;
+    z-index: 9999;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.4);
+}
+
+#modelTooltip.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
 @keyframes spin { to { transform: rotate(360deg); } }
 
 button#rephraseBtn {
@@ -872,6 +905,21 @@ button, select, .intensity-btn, .copy-btn, .clear-btn {
     gap: 4px;
     align-items: center;
     z-index: 3;
+}
+
+#tokenCount {
+    background: rgba(99, 102, 241, 0.15);
+    border: none;
+    padding: 6px 12px;
+    border-radius: 6px;
+    font-size: clamp(11px, 1.2vw, 12px);
+    color: #ffffff;
+    display: inline-block;
+    font-weight: 500;
+}
+
+@keyframes spin {
+    to { stroke-dashoffset: -47.1; }
 }
 
 .token-modal {
