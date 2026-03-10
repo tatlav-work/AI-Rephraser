@@ -44,18 +44,11 @@
 }
 
 .custom-dropdown-menu li {
-    padding: 8px 12px;
-    cursor: pointer;
-    color: #ffffff;
-    font-size: 14px;
-    font-weight: 400;
-    line-height: 1;
-    display: flex;
-    align-items: center;
-    gap: 8px;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    max-width: 100%;
+    padding: 8px 12px;
 }
 
 .custom-dropdown-menu li:hover {
@@ -738,7 +731,29 @@ button, select, .intensity-btn, .copy-btn, .clear-btn {
     }
 }
 
-/* ===== FLUID LANGUAGE SELECTOR ===== */
+.control-select::before {
+    display: none !important;
+}
+
+.dropdown-toggle::before {
+    display: none !important;
+}
+
+.control-select::after {
+    display: none !important;
+}
+
+.dropdown-toggle::after {
+    display: none !important;
+}
+
+#historySelect::after {
+    content: '▼';
+    font-size: clamp(8px, 1vw, 10px);
+    color: rgba(100, 200, 255, 0.7);
+    margin-left: auto;
+    flex-shrink: 0;
+}
 
 .header-lang {
     grid-column: 2;
@@ -764,13 +779,71 @@ button, select, .intensity-btn, .copy-btn, .clear-btn {
     padding-right: clamp(4px, 0.8vw, 6px);
 }
 
-.header-lang #languageSelect::after {
-    content: '▼';
-    font-size: clamp(8px, 1vw, 10px);
+.textarea-wrapper {
+    position: relative;
 }
 
-.header-lang .dropdown-toggle::after {
-    display: none;
+.char-counter {
+    position: absolute;
+    bottom: 12px;
+    right: 50px;
+    font-size: clamp(11px, 1.2vw, 12px);
+    color: var(--text-gray);
+}
+
+.clear-input-btn {
+    position: absolute;
+    bottom: 12px;
+    right: 12px;
+    width: 32px;
+    height: 32px;
+    padding: 0;
+    font-size: 18px;
+    line-height: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.upload-doc-btn {
+    position: absolute;
+    bottom: 12px;
+    right: 88px;
+    width: 32px;
+    height: 32px;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 6px;
+    color: #ffffff;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.copy-btn {
+    position: absolute;
+    bottom: 12px;
+    right: 12px;
+    width: 32px;
+    height: 32px;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 6px;
+    color: #ffffff;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.copy-btn:hover {
+    background: rgba(255, 255, 255, 0.12);
+    border-color: rgba(255, 255, 255, 0.25);
 }
 
 #languageLabel {
