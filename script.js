@@ -101,14 +101,38 @@
 
     // Логика управления лимитами (токены)
     let tokens = 100;
-    const TOKENS_PER_GEN = 10;
+    const TOKENS_PER_GEN = 10; // Default for Llama
+    const MODEL_TOKEN_COSTS = {
+        'llama3-8b': 10,
+        'gpt-4o': 25
+    };
     const history = [];
+
+    function getTaskWord(n) {
+        if (n % 10 === 1 && n % 100 !== 11) return 'раз';
+        if ([2,3,4].includes(n % 10) && ![12,13,14].includes(n % 100)) return 'раза';
+        return 'раз';
+    }
 
     function updateTokenDisplay() {
         const lang = languageSelect.dataset.value || 'en';
-        const gensLeft = Math.floor(tokens / TOKENS_PER_GEN);
+        const modelValue = modelSelect?.dataset.value || 'llama3-8b';
+        const tokenCost = MODEL_TOKEN_COSTS[modelValue] || TOKENS_PER_GEN;
+        const gensLeft = Math.floor(tokens / tokenCost);
+        
         if (lang === 'ru') {
-            tokenDisplay.textContent = `${gensLeft} раз | ${tokens} токенов`;
+            // Russian grammar rules for genitive/nominative
+            let tokenWord;
+            
+            if (tokens % 10 === 1 && tokens % 100 !== 11) {
+                tokenWord = 'токен';
+            } else if ([2, 3, 4].includes(tokens % 10) && ![12, 13, 14].includes(tokens % 100)) {
+                tokenWord = 'токена';
+            } else {
+                tokenWord = 'токенов';
+            }
+            
+            tokenDisplay.textContent = `${gensLeft} ${getTaskWord(gensLeft)} | ${tokens} ${tokenWord}`;
         } else {
             tokenDisplay.textContent = `${gensLeft} tasks | ${tokens} tokens`;
         }
@@ -158,10 +182,18 @@
     async function startRephrasing() {
         const text = inputText.value.trim();
         const currentLang = getCurrentLanguage();
+        const modelValue = modelSelect?.dataset.value || 'llama3-8b';
+        const tokenCost = MODEL_TOKEN_COSTS[modelValue] || TOKENS_PER_GEN;
 
         if (!text || rephraseBtn.disabled) return;
         
-        if (!updateTokens()) return;
+        if (tokens < tokenCost) {
+            showTokenModal();
+            return;
+        }
+        
+        tokens -= tokenCost;
+        updateTokenDisplay();
 
         const styleValue = modeSelect?.dataset.value || 'professional';
         const customStyle = customStyleInput ? customStyleInput.value.trim() : '';
@@ -236,12 +268,40 @@
             }
         });
         
+        const modelLabel = document.querySelector('[data-i18n="label_model"]');
+        if (modelLabel) {
+            const langText = lang === 'ru' ? 'Модель ИИ' : 'AI Model';
+            modelLabel.innerHTML = `${langText} <span class="info-icon" id="modelInfoIcon">ℹ️</span>`;
+        }
+        
         inputText.placeholder = lang === 'ru' ? 'Введите текст...' : 'Type or paste your text here...';
         if (outputText.textContent.includes("Результат") || outputText.textContent.includes("Result")) {
             outputText.textContent = translations[lang].res_placeholder;
         }
         customStyleInput.placeholder = lang === 'ru' ? 'Опишите свой стиль...' : 'Describe your custom style...';
         uploadDocBtn.querySelector('span') && (uploadDocBtn.querySelector('span').textContent = translations[lang].upload_doc);
+
+        const tooltip = document.getElementById('modelTooltip');
+        if (tooltip) {
+            tooltip.innerHTML = lang === 'ru'
+                ? '🦙 Llama 3: 1 раз = 10 токенов<br>⚡ GPT-4o: 1 раз = 15 токенов'
+                : '🦙 Llama 3: 1 task = 10 tokens<br>⚡ GPT-4o: 1 task = 15 tokens';
+        }
+
+        const newIcon = document.getElementById('modelInfoIcon');
+        if (newIcon) {
+            newIcon.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const tooltip = document.getElementById('modelTooltip');
+                const rect = newIcon.getBoundingClientRect();
+                tooltip.innerHTML = lang === 'ru'
+                    ? '🦙 Llama 3: 1 раз = 10 токенов<br>⚡ GPT-4o: 1 раз = 15 токенов'
+                    : '🦙 Llama 3: 1 task = 10 tokens<br>⚡ GPT-4o: 1 task = 15 tokens';
+                tooltip.style.left = rect.left + 'px';
+                tooltip.style.top = (rect.top - tooltip.offsetHeight - 8) + window.scrollY + 'px';
+                tooltip.classList.toggle('visible');
+            });
+        }
 
         updateTokenDisplay();
         renderHistory();
@@ -293,7 +353,7 @@
         const ext = file.name.split('.').pop().toLowerCase();
 
         // Show loading state on button
-        uploadDocBtn.textContent = '⏳ Loading...';
+        uploadDocBtn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10" opacity="0.3"/><circle cx="12" cy="12" r="10" fill="none" stroke="currentColor" stroke-dasharray="15.7 47.1" stroke-dashoffset="0" style="animation: spin 1s linear infinite"/></svg>';
         uploadDocBtn.disabled = true;
 
         try {
@@ -310,9 +370,9 @@
                 const data = await response.json();
                 if (data.error) {
                     alert(lang === 'ru' ? 'Не удалось извлечь текст из PDF' : 'Could not extract text from PDF');
-                    uploadDocBtn.innerHTML = '⚠️ Error';
+                    uploadDocBtn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>';
                     setTimeout(() => {
-                        uploadDocBtn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg> Upload Doc';
+                        uploadDocBtn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>';
                         uploadDocBtn.disabled = false;
                     }, 2000);
                     return;
@@ -327,17 +387,17 @@
                 return;
             }
             inputText.dispatchEvent(new Event('input'));
-            uploadDocBtn.innerHTML = '✅ Loaded!';
+            uploadDocBtn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>';
             setTimeout(() => {
-                uploadDocBtn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg> Upload Doc';
+                uploadDocBtn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>';
                 uploadDocBtn.disabled = false;
             }, 2000);
         } catch (err) {
             console.error('Upload error:', err);
             alert('Error reading file: ' + err.message);
-            uploadDocBtn.innerHTML = '⚠️ Error';
+            uploadDocBtn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>';
             setTimeout(() => {
-                uploadDocBtn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg> Upload Doc';
+                uploadDocBtn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>';
                 uploadDocBtn.disabled = false;
             }, 2000);
         }
@@ -462,6 +522,7 @@
             modelSelect.dataset.value = value;
             modelLabel.textContent = li.textContent;
             modelMenu.classList.add('hidden');
+            updateTokenDisplay(); // Refresh token display with new model cost
         });
     }
 
@@ -506,3 +567,24 @@
     updateTokenDisplay();
     renderHistory();
 })();
+
+const modelIcon = document.getElementById('modelInfoIcon');
+if (modelIcon) {
+    const tooltip = document.createElement('div');
+    tooltip.id = 'modelTooltip';
+    const lang = document.documentElement.lang || 'en';
+    tooltip.innerHTML = lang === 'ru'
+        ? '🦙 Llama 3: 1 раз = 10 токенов<br>⚡ GPT-4o: 1 раз = 15 токенов'
+        : '🦙 Llama 3: 1 task = 10 tokens<br>⚡ GPT-4o: 1 task = 15 tokens';
+    document.body.appendChild(tooltip);
+
+    modelIcon.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const rect = modelIcon.getBoundingClientRect();
+        tooltip.style.left = rect.left + 'px';
+        tooltip.style.top = (rect.top - tooltip.offsetHeight - 8) + window.scrollY + 'px';
+        tooltip.classList.toggle('visible');
+    });
+
+    document.addEventListener('click', () => tooltip.classList.remove('visible'));
+}
