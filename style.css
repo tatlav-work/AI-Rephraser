@@ -55,6 +55,21 @@
     background: rgba(77, 58, 251, 0.3);
 }
 
+.control-select:hover,
+.dropdown-toggle:hover,
+.custom-dropdown:hover .control-select,
+.custom-dropdown:hover .dropdown-toggle {
+    border-color: rgba(99, 102, 241, 0.8);
+    background-color: rgba(99, 102, 241, 0.1);
+    transition: all 0.2s ease;
+}
+
+.custom-dropdown-menu li:hover {
+    background: rgba(99, 102, 241, 0.15);
+    color: #fff;
+    transition: background 0.15s ease;
+}
+
 #modeSelect {
     display: flex;
     align-items: center;
@@ -281,6 +296,13 @@ textarea {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+}
+
+.control-select:hover,
+.dropdown-toggle:hover {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='white' viewBox='0 0 16 16'%3E%3Cpath d='M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
 }
 
 #modeSelect {
@@ -751,20 +773,12 @@ button, select, .intensity-btn, .copy-btn, .clear-btn {
     display: none !important;
 }
 
-.control-select::after {
-    display: none !important;
-}
-
-.dropdown-toggle::after {
-    display: none !important;
-}
-
-#historySelect::after {
-    content: '▼';
-    font-size: clamp(8px, 1vw, 10px);
-    color: rgba(100, 200, 255, 0.7);
-    margin-left: auto;
-    flex-shrink: 0;
+.control-select:hover::after,
+.dropdown-toggle:hover::after,
+.custom-select:hover .control-select::after,
+.custom-select:hover .dropdown-toggle::after {
+    display: block;
+    opacity: 1;
 }
 
 .header-lang {
@@ -886,15 +900,22 @@ button, select, .intensity-btn, .copy-btn, .clear-btn {
     z-index: 3;
 }
 
+#tokenCount strong {
+    color: #ffffff !important;
+    font-weight: 700 !important;
+}
+
 #tokenCount {
-    background: rgba(99, 102, 241, 0.15);
-    border: none;
-    padding: 6px 12px;
-    border-radius: 6px;
-    font-size: clamp(11px, 1.2vw, 12px);
-    color: #ffffff;
-    display: inline-block;
-    font-weight: 500;
+    animation: tokenPulse 0.6s ease 0.5s 3;
+    font-size: clamp(11px, 1.2vw, 14px) !important;
+    font-weight: 400 !important;
+    color: #ffffff !important;
+    background: rgba(251, 146, 36, 0.15) !important;
+    border: 1px solid rgba(251, 146, 36, 0.7) !important;
+    color: #fbbf24 !important;
+    padding: 5px 12px !important;
+    border-radius: 8px !important;
+    display: inline-block !important;
 }
 
 @keyframes spin {

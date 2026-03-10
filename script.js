@@ -54,7 +54,7 @@
             opt_cas: "😊 Casual",
             opt_kids: "👶 For Kids",
             opt_short: "⚡️ Shorten",
-            res_placeholder: "Result will appear here...",
+            res_placeholder: "Result will appear here 🙌",
             copy_tooltip: "Copy result",
             copied: "Copied! ✅",
             custom_style_placeholder: "Describe your custom style...",
@@ -67,7 +67,7 @@
             label_output: "Магический результат ✨",
             btn_rephrase: "Перефразировать! 🚀",
             tokens_label: "Токенов осталось:",
-            processing: "Обработка...",
+            processing: "Происходит магия...",
             limit_alert: "Лимит символов достигнут",
             label_model: "Модель ИИ",
             label_lang: "Язык интерфейса",
@@ -79,7 +79,7 @@
             opt_cas: "😊 Повседневный",
             opt_kids: "👶 Для детей",
             opt_short: "⚡️ Сократить",
-            res_placeholder: "Результат появится здесь...",
+            res_placeholder: "Результат появится здесь 🙌",
             copy_tooltip: "Скопировать результат",
             copied: "Скопировано! ✅",
             label_custom_style: "Кастомный стиль",
@@ -121,20 +121,19 @@
         const gensLeft = Math.floor(tokens / tokenCost);
         
         if (lang === 'ru') {
-            // Russian grammar rules for genitive/nominative
             let tokenWord;
             
             if (tokens % 10 === 1 && tokens % 100 !== 11) {
                 tokenWord = 'токен';
-            } else if ([2, 3, 4].includes(tokens % 10) && ![12, 13, 14].includes(tokens % 100)) {
+            } else if ([2,3,4].includes(tokens % 10) && ![12,13,14].includes(tokens % 100)) {
                 tokenWord = 'токена';
             } else {
                 tokenWord = 'токенов';
             }
             
-            tokenDisplay.textContent = `${gensLeft} ${getTaskWord(gensLeft)} | ${tokens} ${tokenWord}`;
+            tokenDisplay.innerHTML = `<strong>${gensLeft}</strong> ${getTaskWord(gensLeft)} | <strong>${tokens}</strong> ${tokenWord}`;
         } else {
-            tokenDisplay.textContent = `${gensLeft} tasks | ${tokens} tokens`;
+            tokenDisplay.innerHTML = `<strong>${gensLeft}</strong> tasks | <strong>${tokens}</strong> tokens`;
         }
     }
 
@@ -274,7 +273,7 @@
             modelLabel.innerHTML = `${langText} <span class="info-icon" id="modelInfoIcon">ℹ️</span>`;
         }
         
-        inputText.placeholder = lang === 'ru' ? 'Введите текст...' : 'Type or paste your text here...';
+        inputText.placeholder = lang === 'ru' ? 'Добавьте текст или прикрепите файл 📎' : 'Type or paste your text or attach a file 📎';
         if (outputText.textContent.includes("Результат") || outputText.textContent.includes("Result")) {
             outputText.textContent = translations[lang].res_placeholder;
         }
@@ -312,6 +311,9 @@
         languageSelect.dataset.value = languageSelect.dataset.value || 'en';
 
         languageSelect.addEventListener('click', () => {
+            // Before opening current select, close all others
+            document.querySelectorAll('.custom-dropdown-menu').forEach(el => el.classList.add('hidden'));
+            // Then open current one
             languageMenu.classList.toggle('hidden');
         });
 
@@ -472,6 +474,9 @@
     if (historySelect && historyMenu) {
         historySelect.addEventListener('click', () => {
             if (history.length === 0) return; // Block if empty
+            // Before opening current select, close all others
+            document.querySelectorAll('.custom-dropdown-menu').forEach(el => el.classList.add('hidden'));
+            // Then open current one
             historyMenu.classList.toggle('hidden');
         });
 
@@ -491,6 +496,9 @@
     // Кастомный дропдаун для модели
     if (modelSelect && modelMenu && modelLabel) {
         modelSelect.addEventListener('click', () => {
+            // Before opening current select, close all others
+            document.querySelectorAll('.custom-dropdown-menu').forEach(el => el.classList.add('hidden'));
+            // Then open current one
             modelMenu.classList.toggle('hidden');
         });
 
@@ -509,6 +517,9 @@
     // Кастомный дропдаун для стиля
     if (modeSelect && modeMenu && modeLabel) {
         modeSelect.addEventListener('click', () => {
+            // Before opening current select, close all others
+            document.querySelectorAll('.custom-dropdown-menu').forEach(el => el.classList.add('hidden'));
+            // Then open current one
             modeMenu.classList.toggle('hidden');
         });
 
@@ -537,6 +548,13 @@
         });
     }
 
+    // Close dropdowns when clicking outside
+    document.addEventListener('click', (e) => {
+        if (!e.target.closest('.custom-dropdown')) {
+            document.querySelectorAll('.custom-dropdown-menu').forEach(el => el.classList.add('hidden'));
+        }
+    });
+
     if (tokenModalBtn) {
         tokenModalBtn.addEventListener('click', () => {
             window.location.href = 'https://your-product.com/auth'; // TODO: заменить на реальный путь аутентификации/оплаты
@@ -544,6 +562,8 @@
     }
 
     // Инициализация
+    const initialLang = languageSelect?.dataset.value || 'en';
+    applyLanguage(initialLang);
     updateTokenDisplay();
     renderHistory();
 })();
