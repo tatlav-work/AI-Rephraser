@@ -707,14 +707,14 @@ button, select, .intensity-btn, .copy-btn, .clear-btn {
 /* 3. Нейтральный цвет для кнопки копирования */
 /* уже задано выше */
 
-/* 4. Адаптивность для мобильных устройств */
 @media (max-width: 768px) {
-    .main-container {
-        flex-direction: column; /* Инпуты встают друг под друга */
-        gap: 20px;
-    }
-    .input-box, .output-box {
-        width: 100% !important;
+    .rephrase-btn, #rephraseBtn {
+        position: sticky;
+        bottom: 0;
+        z-index: 100;
+        margin: 0;
+        border-radius: 0;
+        width: 100%;
     }
 }
 

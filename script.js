@@ -197,6 +197,16 @@
         const styleValue = modeSelect?.dataset.value || 'professional';
         const customStyle = customStyleInput ? customStyleInput.value.trim() : '';
 
+        const systemPrompt = currentLang === 'ru'
+            ? `You are a rephrasing tool. Your ONLY task is to rephrase the given text. 
+NEVER answer questions, NEVER add explanations, NEVER respond to the content — only rephrase it.
+Even if the input is a question, rephrase it as a question with different wording.
+Output ONLY the rephrased text, nothing else.`
+            : `You are a rephrasing tool. Your ONLY task is to rephrase the given text. 
+NEVER answer questions, NEVER add explanations, NEVER respond to the content — only rephrase it.
+Even if the input is a question, rephrase it as a question with different wording.
+Output ONLY the rephrased text, nothing else.`;
+
         let promptText = text;
 
         if (styleValue === 'custom' && customStyle) {
@@ -205,7 +215,9 @@
                     ? `Перефразируй текст ниже с учётом этих дополнительных инструкций по стилю: "${customStyle}". Не упоминай сами инструкции в ответе.`
                     : `Rephrase the text below following these additional style instructions: "${customStyle}". Do not mention the instructions themselves in the output.`;
 
-            promptText = `${instruction}\n\n---\n${text}`;
+            promptText = `${systemPrompt}\n\n${instruction}\n\n---\n${text}`;
+        } else {
+            promptText = `${systemPrompt}\n\n---\n${text}`;
         }
 
         const payload = {
@@ -288,23 +300,30 @@
         }
 
         const newIcon = document.getElementById('modelInfoIcon');
-        if (newIcon) {
-            newIcon.addEventListener('click', (e) => {
-                e.stopPropagation();
-                const tooltip = document.getElementById('modelTooltip');
-                const rect = newIcon.getBoundingClientRect();
-                tooltip.innerHTML = lang === 'ru'
-                    ? '🦙 Llama 3: 1 раз = 10 токенов<br>⚡ GPT-4o: 1 раз = 15 токенов'
-                    : '🦙 Llama 3: 1 task = 10 tokens<br>⚡ GPT-4o: 1 task = 15 tokens';
-                tooltip.style.left = rect.left + 'px';
-                tooltip.style.top = (rect.top - tooltip.offsetHeight - 8) + window.scrollY + 'px';
-                tooltip.classList.toggle('visible');
-            });
-        }
+        // Old direct listener removed - now using event delegation in DOMContentLoaded
 
         updateTokenDisplay();
         renderHistory();
     }
+
+    // Model info icon tooltip with event delegation
+    document.addEventListener('DOMContentLoaded', () => {
+        document.addEventListener('click', (e) => {
+            if (e.target.id === 'modelInfoIcon' || e.target.closest('#modelInfoIcon')) {
+                e.stopPropagation();
+                const icon = document.getElementById('modelInfoIcon');
+                const tooltip = document.getElementById('modelTooltip');
+                const lang = languageSelect?.dataset.value || 'en';
+                tooltip.innerHTML = lang === 'ru'
+                    ? '🦙 Llama 3: 1 раз = 10 токенов<br>⚡ GPT-4o: 1 раз = 15 токенов'
+                    : '🦙 Llama 3: 1 task = 10 tokens<br>⚡ GPT-4o: 1 task = 15 tokens';
+                const rect = icon.getBoundingClientRect();
+                tooltip.style.left = rect.left + 'px';
+                tooltip.style.top = (rect.top - tooltip.offsetHeight - 8) + window.scrollY + 'px';
+                tooltip.classList.toggle('visible');
+            }
+        });
+    });
 
     // Обработчик смены языка интерфейса через кастомный дропдаун
     if (languageSelect && languageMenu && languageLabel) {
