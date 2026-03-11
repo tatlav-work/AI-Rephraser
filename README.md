@@ -4,6 +4,8 @@
 
 [![Live Demo](https://img.shields.io/badge/🚀_Live_Demo-ai--rephraser--api.onrender.com-6366f1?style=for-the-badge)](https://ai-rephraser-api.onrender.com)
 
+![AI Rephraser Screenshot](screenshot.png)
+
 ---
 
 ## ✨ Основные функции
