@@ -44,7 +44,6 @@ def rephrase():
             f"- Return ONLY the rephrased text. No explanations, no intros, no quotes."
         )
 
-          model = data.get('model', 'gpt-4o-mini')  
           response = client.chat.completions.create(
             model=model,  
             messages=[
