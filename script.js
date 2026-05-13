@@ -103,8 +103,8 @@
     let tokens = 100;
     const TOKENS_PER_GEN = 10; // Default for Llama
     const MODEL_TOKEN_COSTS = {
-        'llama3-8b': 10,
-        'gpt-4o': 25
+        'gpt-4o-mini': 10,
+        'gpt-4o': 15
     };
     const history = [];
 
@@ -225,6 +225,7 @@ Output ONLY the rephrased text, nothing else.`;
             style: styleValue,
             language: currentLang,
             intensity: intensityHiddenInput.value
+            model: modelValue
         };
 
         if (styleValue === 'custom' && customStyle) {
@@ -593,8 +594,8 @@ if (modelIcon) {
     tooltip.id = 'modelTooltip';
     const lang = document.documentElement.lang || 'en';
     tooltip.innerHTML = lang === 'ru'
-        ? '🦙 Llama 3: 1 раз = 10 токенов<br>⚡ GPT-4o: 1 раз = 15 токенов'
-        : '🦙 Llama 3: 1 task = 10 tokens<br>⚡ GPT-4o: 1 task = 15 tokens';
+        ? '⚡ GPT-4o Mini: 1 раз = 10 токенов<br>⚡ GPT-4o: 1 раз = 15 токенов'
+        : '⚡ GPT-4o Mini: 1 task = 10 tokens<br>⚡ GPT-4o: 1 task = 15 tokens';
     document.body.appendChild(tooltip);
 
     modelIcon.addEventListener('click', (e) => {
