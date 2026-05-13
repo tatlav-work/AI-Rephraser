@@ -28,6 +28,7 @@ def rephrase():
         style = data.get('style', 'professional')
         language = data.get('language', 'en') # По умолчанию теперь English
         intensity = data.get('intensity', '1')
+        model = data.get('model', 'gpt-4o-mini')
 
         # Улучшенный промпт для более точного следования выбранным настройкам
         prompt = (
