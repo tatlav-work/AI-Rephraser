@@ -224,7 +224,7 @@ Output ONLY the rephrased text, nothing else.`;
             text: promptText,
             style: styleValue,
             language: currentLang,
-            intensity: intensityHiddenInput.value
+            intensity: intensityHiddenInput.value,
             model: modelValue
         };
 
