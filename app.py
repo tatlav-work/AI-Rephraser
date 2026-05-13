@@ -42,17 +42,17 @@ def rephrase():
             f"- If style is 'official', use formal vocabulary and complex sentence structures.\n"
             f"- If Creativity Level is 3, feel free to change the structure significantly while keeping the core meaning.\n"
             f"- Return ONLY the rephrased text. No explanations, no intros, no quotes."
-        )
-
-          response = client.chat.completions.create(
-            model=model,  
+       )
+ 
+        response = client.chat.completions.create(
+            model=model,
             messages=[
                 {"role": "system", "content": prompt},
                 {"role": "user", "content": user_text}
             ],
-            temperature=0.7, # Немного подняли температуру для большей "магии" на уровне 3
+            temperature=0.7,
         )
-
+ 
         return jsonify({"result": response.choices[0].message.content.strip()})
     
     except Exception as e:
