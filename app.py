@@ -2,16 +2,15 @@ import os
 import io
 from flask import Flask, request, jsonify, send_from_directory
 from flask_cors import CORS
-from openai import OpenAI
+from groq import Groq
 import fitz  # pymupdf
 
 app = Flask(__name__)
 CORS(app)
 
 # Используем ключ из переменных окружения
-API_KEY = os.environ.get("AIML_API_KEY", "")
-BASE_URL = os.environ.get("AIML_API_BASE", "https://api.aimlapi.com/v1")
-client = OpenAI(api_key=API_KEY, base_url=BASE_URL)
+API_KEY = os.environ.get("GROQ_API_KEY", "")
+client = Groq(api_key=API_KEY)
 
 @app.route('/')
 def index():
@@ -45,7 +44,7 @@ def rephrase():
         )
 
         response = client.chat.completions.create(
-            model="gpt-4o-mini",
+            model="llama-3.3-70b-versatile",
             messages=[
                 {"role": "system", "content": prompt},
                 {"role": "user", "content": user_text}
