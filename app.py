@@ -12,6 +12,9 @@ CORS(app)
 API_KEY = os.environ.get("GROQ_API_KEY", "")
 client = Groq(api_key=API_KEY)
 
+# Модели Groq, доступные на бесплатном тарифе. Первая используется по умолчанию
+ALLOWED_MODELS = ["openai/gpt-oss-20b", "openai/gpt-oss-120b"]
+
 @app.route('/')
 def index():
     return send_from_directory('.', 'index.html')
@@ -28,7 +31,9 @@ def rephrase():
         style = data.get('style', 'professional')
         language = data.get('language', 'en') # По умолчанию теперь English
         intensity = data.get('intensity', '1')
-        model = data.get('model', 'gpt-4o-mini')
+        model = data.get('model')
+        if model not in ALLOWED_MODELS:
+            model = ALLOWED_MODELS[0]
 
         # Улучшенный промпт для более точного следования выбранным настройкам
         prompt = (
@@ -45,7 +50,7 @@ def rephrase():
        )
  
         response = client.chat.completions.create(
-            model="openai/gpt-oss-20b",
+            model=model,
             messages=[
                 {"role": "system", "content": prompt},
                 {"role": "user", "content": user_text}

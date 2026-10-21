@@ -101,10 +101,10 @@
 
     // Логика управления лимитами (токены)
     let tokens = 100;
-    const TOKENS_PER_GEN = 10; // Default for Llama
+    const TOKENS_PER_GEN = 10; // Default for GPT-OSS 20B
     const MODEL_TOKEN_COSTS = {
-        'gpt-4o-mini': 10,
-        'gpt-4o': 15
+        'openai/gpt-oss-20b': 10,
+        'openai/gpt-oss-120b': 15
     };
     const history = [];
 
@@ -116,7 +116,7 @@
 
     function updateTokenDisplay() {
         const lang = languageSelect.dataset.value || 'en';
-        const modelValue = modelSelect?.dataset.value || 'llama3-8b';
+        const modelValue = modelSelect?.dataset.value || 'openai/gpt-oss-20b';
         const tokenCost = MODEL_TOKEN_COSTS[modelValue] || TOKENS_PER_GEN;
         const gensLeft = Math.floor(tokens / tokenCost);
         
@@ -181,7 +181,7 @@
     async function startRephrasing() {
         const text = inputText.value.trim();
         const currentLang = getCurrentLanguage();
-        const modelValue = modelSelect?.dataset.value || 'llama3-8b';
+        const modelValue = modelSelect?.dataset.value || 'openai/gpt-oss-20b';
         const tokenCost = MODEL_TOKEN_COSTS[modelValue] || TOKENS_PER_GEN;
 
         if (!text || rephraseBtn.disabled) return;
@@ -296,8 +296,8 @@ Output ONLY the rephrased text, nothing else.`;
         const tooltip = document.getElementById('modelTooltip');
         if (tooltip) {
             tooltip.innerHTML = lang === 'ru'
-                ? '🦙 Llama 3: 1 раз = 10 токенов<br>⚡ GPT-4o: 1 раз = 15 токенов'
-                : '🦙 Llama 3: 1 task = 10 tokens<br>⚡ GPT-4o: 1 task = 15 tokens';
+                ? '⚡ GPT-OSS 20B: 1 раз = 10 токенов<br>🧠 GPT-OSS 120B: 1 раз = 15 токенов'
+                : '⚡ GPT-OSS 20B: 1 task = 10 tokens<br>🧠 GPT-OSS 120B: 1 task = 15 tokens';
         }
 
         const newIcon = document.getElementById('modelInfoIcon');
@@ -316,8 +316,8 @@ Output ONLY the rephrased text, nothing else.`;
                 const tooltip = document.getElementById('modelTooltip');
                 const lang = languageSelect?.dataset.value || 'en';
                 tooltip.innerHTML = lang === 'ru'
-                    ? '🦙 Llama 3: 1 раз = 10 токенов<br>⚡ GPT-4o: 1 раз = 15 токенов'
-                    : '🦙 Llama 3: 1 task = 10 tokens<br>⚡ GPT-4o: 1 task = 15 tokens';
+                    ? '⚡ GPT-OSS 20B: 1 раз = 10 токенов<br>🧠 GPT-OSS 120B: 1 раз = 15 токенов'
+                    : '⚡ GPT-OSS 20B: 1 task = 10 tokens<br>🧠 GPT-OSS 120B: 1 task = 15 tokens';
                 const rect = icon.getBoundingClientRect();
                 tooltip.style.left = rect.left + 'px';
                 tooltip.style.top = (rect.top - tooltip.offsetHeight - 8) + window.scrollY + 'px';
@@ -594,8 +594,8 @@ if (modelIcon) {
     tooltip.id = 'modelTooltip';
     const lang = document.documentElement.lang || 'en';
     tooltip.innerHTML = lang === 'ru'
-        ? '⚡ GPT-4o Mini: 1 раз = 10 токенов<br>⚡ GPT-4o: 1 раз = 15 токенов'
-        : '⚡ GPT-4o Mini: 1 task = 10 tokens<br>⚡ GPT-4o: 1 task = 15 tokens';
+        ? '⚡ GPT-OSS 20B: 1 раз = 10 токенов<br>🧠 GPT-OSS 120B: 1 раз = 15 токенов'
+        : '⚡ GPT-OSS 20B: 1 task = 10 tokens<br>🧠 GPT-OSS 120B: 1 task = 15 tokens';
     document.body.appendChild(tooltip);
 
     modelIcon.addEventListener('click', (e) => {

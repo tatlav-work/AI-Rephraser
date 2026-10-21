@@ -12,7 +12,7 @@
 
 - **Мультиязычность**: русский и английский интерфейс
 - **Многостилевая обработка**: стандартные стили + **custom** (свой промпт)
-- **Выбор AI модели**: Llama 3 (быстрый) и GPT-4o (умный)
+- **Выбор AI модели**: GPT-OSS 20B (быстрая) и GPT-OSS 120B (умная) через Groq API
 - **3 уровня креативности**: от мягкого перефраза до глубокой переработки текста
 - **Загрузка файлов**: поддержка TXT, PDF, DOC
 - **Счётчик токенов**: видно сколько запросов и токенов осталось
@@ -26,7 +26,7 @@
 |------|-----------|
 | Frontend | HTML5, CSS3, JavaScript (Vanilla) |
 | Backend | Python, Flask |
-| AI Engine | Llama 3.3 via Groq API, GPT-4o |
+| AI Engine | openai/gpt-oss-20b, openai/gpt-oss-120b via Groq API |
 | Infrastructure | GitHub Pages (client) + Render (server) |
 
 ## 🚀 Как запустить
