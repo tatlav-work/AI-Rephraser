@@ -719,6 +719,11 @@ button, select, .intensity-btn, .copy-btn, .clear-btn {
 }
 
 @media (max-width: 480px) {
+    /* Выбор модели на всю ширину, иначе названия моделей обрезаются */
+    .controls-row .control-group:first-child {
+        grid-column: 1 / -1;
+    }
+
     .header-row {
         display: grid;
         grid-template-columns: 1fr auto;
